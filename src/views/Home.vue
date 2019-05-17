@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" style="flex-grow:1">
     home
   </div>
 </template>
