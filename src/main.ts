@@ -2,7 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import "amazeui/less/amazeui.less";
-
+import "amazeui/dist/css/amazeui.css";
+import 'element-ui/lib/theme-chalk/index.css';
 Vue.config.productionTip = false
 
 new Vue({
