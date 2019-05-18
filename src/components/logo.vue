@@ -1,3 +1,3 @@
 <template>
-    <a class="am-primary am-icon-qq">xxx系统</a>
+    <a class="am-warning am-icon-qq">xxx系统</a>
 </template>

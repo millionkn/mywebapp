@@ -1,19 +1,35 @@
 <template>
   <div class="global">
-    <div class="header">
+    <div class="header am-topbar-inverse">
       <logo/>
       <span style="flex-grow:1"/>
       <logo/>
     </div>
     <div class="body">
       <div class="aside">
-
+        <ul class="am-nav">
+          <li><router-link to="/">控制台</router-link></li>
+          <li class="am-nav-divider"></li>
+          <!-- 管理员功能 -->
+          <li><router-link to="/users">用户管理</router-link></li>
+          <li><router-link to="/suppliers">供应商管理</router-link></li>
+          <li><router-link to="/offices">科室管理</router-link></li>
+          <li class="am-nav-divider"></li>
+          <!-- 特定人员功能 -->
+          <li><router-link to="/drivers">设备</router-link></li>
+        </ul>
       </div>
       <div class="body">
         <ol class="am-breadcrumb">
-          <li><a href="#">首页</a></li>
-          <li><a href="#">分类</a></li>
-          <li class="am-active">内容</li>
+          <li v-for="(title,index) in breadcrumbTltles" :key="index">
+            <a href="#"
+              :class="{
+                'am-active':breadcrumbTltles.length==index+1,
+              }"
+            >
+              {{title}}
+            </a>
+          </li>
         </ol>
         <router-view style="padding:6px;display:flex"/>
       </div>
@@ -32,7 +48,6 @@
   flex-direction:column;
   height:100%;
   >.header{
-    background-color: cornflowerblue;
     padding:15px;
     height:60px;
     #flex-container
@@ -42,13 +57,23 @@
     #flex-container;
     flex-direction:row;
     >.aside{
-      background-color:lightslategrey;
+      background-color:#ebebeb;
+      border-right:1px solid #cecece;
       width:240px;
-      #flex-container
+      #flex-container;
+      >.am-nav{
+        #flex-full;
+        align-items:stretch;
+        :first-child{
+          margin-top:1em;
+        }
+      }
     }
     >.body{
       #flex-full;
-      .am-breadcrumb{
+      >.am-breadcrumb{
+        height:3em;
+        background-color:#ebebeb;
         margin:0;
       }
     }
@@ -70,6 +95,12 @@ export default Vue.extend({
     elHeader,
     elAside,
     Logo,
+  },
+  computed:{
+    breadcrumbTltles(){
+      const ret:Array<any> = this.$route.matched.map((r)=>r.meta.breadcrumbTltle);
+      return ret;
+    }
   }
 });
 </script>
