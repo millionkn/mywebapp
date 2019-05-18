@@ -71,6 +71,9 @@
     }
     >.body{
       #flex-full;
+      #flex-container;
+      flex-direction:column;
+      
       >.am-breadcrumb{
         height:3em;
         background-color:#ebebeb;
