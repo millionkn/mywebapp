@@ -13,10 +13,17 @@
         <button type="button" class="am-btn am-btn-primary">添加</button>
         <button type="button" class="am-btn am-btn-primary">导出</button>
         <button type="button" class="am-btn am-btn-primary">导入</button>
+        <button
+          type="button"
+          class="am-btn am-btn-success"
+          @click="makesureCheck"
+        >确认检修</button>
+        <button type="button" class="am-btn am-btn-danger">删除</button>
       </div>
       <div class="am-panel-bd">
         <el-table
           :data="tableData"
+          @selection-change="handleSelectionChange"
         >
           <el-table-column
             type="selection"
@@ -47,11 +54,6 @@
             </template>
           </el-table-column>
           <el-table-column label="提前预警" prop="line">
-          </el-table-column>
-          <el-table-column label="操作">
-            <template #default="scope">
-              <span :class="'text-button'" @click="checkFor(scope.row)"><a href="#">确认检修</a></span>
-            </template>
           </el-table-column>
           <el-table-column label="详情">
             <template #default="scope">
@@ -113,6 +115,7 @@ type TableRow={
   inspectionTimes:Turnaround,
   line:Turnaround,
 };
+let selectedRow:Array<TableRow> = [];
 export default Vue.extend({
   components: {
     ElSelect,
@@ -151,8 +154,12 @@ export default Vue.extend({
   methods:{
     dateOf:(row:TableRow)=>moment(row.buyDate).format("YYYY-M-D"),
     daysAfterLastCheck:(row:TableRow)=>Math.floor(moment.duration(new Date().valueOf()-row.lastCheck).asDays()),
-    checkFor(row:TableRow){
-      row.lastCheck=new Date().valueOf();
+    makesureCheck(){
+      let data=new Date().valueOf();
+      selectedRow.forEach((row)=>row.lastCheck=data);
+    },
+    handleSelectionChange(selected:Array<TableRow>){
+      selectedRow=selected;
     }
   },
 });
