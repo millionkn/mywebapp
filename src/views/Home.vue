@@ -3,11 +3,6 @@
     <div class="am-panel am-panel-secondary">
       <div class="am-panel-hd">
         <el-input placeholder="设备名称" v-model="driverName" class="input">
-          <el-select v-model="office" slot="prepend" placeholder="科室" style="width:8em;">
-            <el-option label="科室A" value="1"></el-option>
-            <el-option label="科室B" value="2"></el-option>
-            <el-option label="科室C" value="3"></el-option>
-          </el-select>
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <button type="button" class="am-btn am-btn-primary">添加</button>
@@ -30,7 +25,12 @@
             width="55"
           >
           </el-table-column>
-          <el-table-column label="科室" prop="office">
+          <el-table-column
+            label="科室"
+            prop="office"
+            :filters="findFilters()"
+            :filter-method="filterHandler"
+          >
           </el-table-column>
           <el-table-column label="仪器名称" prop="name">
           </el-table-column>
@@ -148,6 +148,16 @@ export default Vue.extend({
           inspectionTimes:7,
           line:3,
         },
+        {
+          office:"科室B",
+          name:"仪器B1",
+          buyDate:new Date().valueOf(),
+          lastCheck:moment().add({
+            day:-6,
+          }).valueOf(),
+          inspectionTimes:7,
+          line:5,
+        },
       ],
     };
   },
@@ -160,7 +170,17 @@ export default Vue.extend({
     },
     handleSelectionChange(selected:Array<TableRow>){
       selectedRow=selected;
-    }
+    },
+    findFilters(){
+      return Array(...new Set(this.tableData.map((row)=>row.office)))
+      .map((office)=>{
+        return{
+          value:office,
+          text:office,
+        }
+      })
+    },
+    filterHandler:(value:string, row:TableRow)=>row.office===value,
   },
 });
 </script>
