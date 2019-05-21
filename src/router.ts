@@ -16,6 +16,13 @@ export default new Router({
       },
     },
     {
+      path:"/login",
+      component:()=>import('./views/Login.vue'),
+      meta:{
+        breadcrumbTltle:"登录",
+      },
+    },
+    {
       path:"/",
       component:Empty,
       meta:{
