@@ -31,7 +31,7 @@
             </a>
           </li>
         </ol>
-        <router-view style="padding:6px;display:flex"/>
+        <router-view style="padding:6px;display:flex;height:100%"/>
       </div>
     </div>
   </div>
