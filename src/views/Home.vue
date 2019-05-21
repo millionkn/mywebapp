@@ -10,15 +10,19 @@
             </button>
           </span>
         </div>
-        <button type="button" class="am-btn am-btn-primary">添加</button>
-        <button type="button" class="am-btn am-btn-primary">导出</button>
-        <button type="button" class="am-btn am-btn-primary">导入</button>
-        <button
-          type="button"
-          class="am-btn am-btn-success"
-          @click="makesureCheck"
-        >确认检修</button>
-        <button type="button" class="am-btn am-btn-danger">删除</button>
+        <div class="am-btn-group">
+          <button type="button" class="am-btn am-btn-primary am-round">添加</button>
+          <button type="button" class="am-btn am-btn-primary am-round">导出</button>
+          <button type="button" class="am-btn am-btn-primary am-round">导入</button>
+        </div>
+        <div class="am-btn-group">
+          <button
+            type="button"
+            class="am-btn am-btn-success am-round"
+            @click="makesureCheck"
+          >确认检修</button>
+          <button type="button" class="am-btn am-btn-danger am-round">删除</button>
+        </div>
       </div>
       <div class="am-panel-bd">
         <el-table
