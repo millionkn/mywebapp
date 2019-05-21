@@ -2,9 +2,14 @@
   <div class="home">
     <div class="am-panel am-panel-secondary">
       <div class="am-panel-hd">
-        <el-input placeholder="设备名称" v-model="driverName" class="input">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
+        <div class="am-input-group">
+          <input type="text" class="am-form-field" v-model="driverName">
+          <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="button">
+              <span class="am-icon-search"/>
+            </button>
+          </span>
+        </div>
         <button type="button" class="am-btn am-btn-primary">添加</button>
         <button type="button" class="am-btn am-btn-primary">导出</button>
         <button type="button" class="am-btn am-btn-primary">导入</button>
@@ -86,7 +91,7 @@
     > .am-panel-hd {
       display: flex;
       flex-direction: row;
-      > .input {
+      > .am-input-group {
         flex-grow: 1;
       }
     }
