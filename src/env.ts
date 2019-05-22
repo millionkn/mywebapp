@@ -1,8 +1,7 @@
-import mock from 'mockjs';
-
-if(process.env.NODE_ENV === 'development'){
-  console.log('development')
+export default (async(env)=>{
+  if(env !== 'development'){return console.log("生产环境")}
+  const mock = await import("mockjs");
   mock.setup({
-    timeout:'2000-6000',
+    "timeout":"500-2000",
   });
-}
+})(process.env.NODE_ENV);
