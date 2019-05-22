@@ -26,6 +26,7 @@
       </div>
       <div class="am-panel-bd">
         <el-table
+          id="table"
           :data="tableData"
           @selection-change="handleSelectionChange"
         >
@@ -110,6 +111,7 @@ import axios from 'axios';
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
+  Loading,
 } from "element-ui";
 type TimeStamp=number;
 type Turnaround=number;
@@ -156,9 +158,13 @@ export default Vue.extend({
     filterHandler:(value:string, row:TableRow)=>row.office===value,
   },
   mounted(){
-    axios.get('/data/console').then((res)=>{
-      this.tableData = res.data;
-    })
+    (async ()=>{
+      let loading = Loading.service({
+        'target':'#table',
+      });
+      this.tableData = (await axios.get('/data/console')).data;
+      loading.close();
+    })();
   }
 });
 </script>
