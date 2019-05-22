@@ -106,6 +106,7 @@
 <script lang="ts">
 import Vue from "vue";
 import moment from 'moment';
+import axios from 'axios';
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
@@ -128,38 +129,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      office: undefined,
-      driverName: undefined,
-      tableData:<Array<TableRow>>[
-        {
-          office:"科室A",
-          name:"仪器A1",
-          buyDate:new Date().valueOf(),
-          lastCheck:new Date().valueOf(),
-          inspectionTimes:7,
-          line:3,
-        },
-        {
-          office:"科室A",
-          name:"仪器A1",
-          buyDate:new Date().valueOf(),
-          lastCheck:moment().add({
-            day:-4,
-          }).valueOf(),
-          inspectionTimes:7,
-          line:3,
-        },
-        {
-          office:"科室B",
-          name:"仪器B1",
-          buyDate:new Date().valueOf(),
-          lastCheck:moment().add({
-            day:-6,
-          }).valueOf(),
-          inspectionTimes:7,
-          line:5,
-        },
-      ],
+      office: <string|undefined>undefined,
+      driverName: <string|undefined>undefined,
+      tableData:<Array<TableRow>>[],
     };
   },
   methods:{
@@ -183,5 +155,10 @@ export default Vue.extend({
     },
     filterHandler:(value:string, row:TableRow)=>row.office===value,
   },
+  mounted(){
+    axios.get('/data/console').then((res)=>{
+      this.tableData = res.data;
+    })
+  }
 });
 </script>
