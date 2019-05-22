@@ -107,10 +107,6 @@
 import Vue from "vue";
 import moment from 'moment';
 import {
-  Select as ElSelect,
-  Option as ElOption,
-  Input as ElInput,
-  Button as ElButton,
   Table as ElTable,
   TableColumn as ElTableColumn,
 } from "element-ui";
@@ -127,10 +123,6 @@ type TableRow={
 let selectedRow:Array<TableRow> = [];
 export default Vue.extend({
   components: {
-    ElSelect,
-    ElOption,
-    ElInput,
-    ElButton,
     ElTable,
     ElTableColumn,
   },
