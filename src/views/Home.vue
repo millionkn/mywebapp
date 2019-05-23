@@ -2,18 +2,27 @@
   <div class="home">
     <div class="am-panel am-panel-secondary">
       <div class="am-panel-hd">
-        <el-input placeholder="设备名称" v-model="driverName" class="input">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-        <button type="button" class="am-btn am-btn-primary">添加</button>
-        <button type="button" class="am-btn am-btn-primary">导出</button>
-        <button type="button" class="am-btn am-btn-primary">导入</button>
-        <button
-          type="button"
-          class="am-btn am-btn-success"
-          @click="makesureCheck"
-        >确认检修</button>
-        <button type="button" class="am-btn am-btn-danger">删除</button>
+        <div class="am-input-group">
+          <input type="text" class="am-form-field" v-model="driverName">
+          <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="button">
+              <span class="am-icon-search"/>
+            </button>
+          </span>
+        </div>
+        <div class="am-btn-group">
+          <button type="button" class="am-btn am-btn-primary am-round">添加</button>
+          <button type="button" class="am-btn am-btn-primary am-round">导出</button>
+          <button type="button" class="am-btn am-btn-primary am-round">导入</button>
+        </div>
+        <div class="am-btn-group">
+          <button
+            type="button"
+            class="am-btn am-btn-success am-round"
+            @click="makesureCheck"
+          >确认检修</button>
+          <button type="button" class="am-btn am-btn-danger am-round">删除</button>
+        </div>
       </div>
       <div class="am-panel-bd">
         <el-table
@@ -86,7 +95,7 @@
     > .am-panel-hd {
       display: flex;
       flex-direction: row;
-      > .input {
+      > .am-input-group {
         flex-grow: 1;
       }
     }
