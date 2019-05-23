@@ -10,16 +10,20 @@ export default new Vuex.Store({
         user:<User|null>null,
     },
     mutations:{
-        setUser(state,user:User){
+        setUser(state,user:User|null){
             state.user=user;
         }
     },
     actions:{
-        async login({state},{username,password}){
-            state.user = (await axios.post("/login",{
+        async login({commit},{username,password}){
+            commit('setUser',(await axios.post("/login",{
                 username,
                 password,
-            })).data;
+            })).data);
+        },
+        async logout({commit}){
+            await axios.post('/loginOut');
+            commit('setUser',null);
         }
     }
 })

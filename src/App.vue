@@ -3,7 +3,7 @@
     <div class="header am-topbar-inverse">
       <logo/>
       <span style="flex-grow:1"/>
-      <logo/>
+      <user/>
     </div>
     <div class="body">
       <div class="aside">
@@ -92,12 +92,14 @@ import {
   Aside as elAside,
 } from "element-ui";
 import Logo from '@/components/logo.vue';
+import User from '@/components/User.vue';
 export default Vue.extend({
   components: {
     elContainer,
     elHeader,
     elAside,
     Logo,
+    User,
   },
   computed:{
     breadcrumbTltles(){

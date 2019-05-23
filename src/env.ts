@@ -14,4 +14,5 @@ export default (async(env)=>{
     }
     console.log(obj);
   });
+  mock.mock('/loginOut','post',undefined);
 })(process.env.NODE_ENV);
