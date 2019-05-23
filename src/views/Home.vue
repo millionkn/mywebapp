@@ -26,6 +26,7 @@
       </div>
       <div class="am-panel-bd">
         <el-table
+          id="table"
           :data="tableData"
           @selection-change="handleSelectionChange"
         >
@@ -106,13 +107,11 @@
 <script lang="ts">
 import Vue from "vue";
 import moment from 'moment';
+import axios from 'axios';
 import {
-  Select as ElSelect,
-  Option as ElOption,
-  Input as ElInput,
-  Button as ElButton,
   Table as ElTable,
   TableColumn as ElTableColumn,
+  Loading,
 } from "element-ui";
 type TimeStamp=number;
 type Turnaround=number;
@@ -127,47 +126,14 @@ type TableRow={
 let selectedRow:Array<TableRow> = [];
 export default Vue.extend({
   components: {
-    ElSelect,
-    ElOption,
-    ElInput,
-    ElButton,
     ElTable,
     ElTableColumn,
   },
   data() {
     return {
-      office: undefined,
-      driverName: undefined,
-      tableData:<Array<TableRow>>[
-        {
-          office:"科室A",
-          name:"仪器A1",
-          buyDate:new Date().valueOf(),
-          lastCheck:new Date().valueOf(),
-          inspectionTimes:7,
-          line:3,
-        },
-        {
-          office:"科室A",
-          name:"仪器A1",
-          buyDate:new Date().valueOf(),
-          lastCheck:moment().add({
-            day:-4,
-          }).valueOf(),
-          inspectionTimes:7,
-          line:3,
-        },
-        {
-          office:"科室B",
-          name:"仪器B1",
-          buyDate:new Date().valueOf(),
-          lastCheck:moment().add({
-            day:-6,
-          }).valueOf(),
-          inspectionTimes:7,
-          line:5,
-        },
-      ],
+      office: <string|undefined>undefined,
+      driverName: <string|undefined>undefined,
+      tableData:<Array<TableRow>>[],
     };
   },
   methods:{
@@ -191,5 +157,14 @@ export default Vue.extend({
     },
     filterHandler:(value:string, row:TableRow)=>row.office===value,
   },
+  mounted(){
+    (async ()=>{
+      let loading = Loading.service({
+        'target':'#table',
+      });
+      this.tableData = (await axios.get('/data/console')).data;
+      loading.close();
+    })();
+  }
 });
 </script>
