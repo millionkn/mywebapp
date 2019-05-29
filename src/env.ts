@@ -12,7 +12,6 @@ export default (async(env)=>{
         role:"测试者",
       }
     }
-    console.log(obj);
   });
   mock.mock('/loginOut','post',undefined);
 })(process.env.NODE_ENV);
