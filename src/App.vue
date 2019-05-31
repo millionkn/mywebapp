@@ -1,14 +1,14 @@
 <template>
   <div class="global">
     <div class="header am-topbar-inverse">
+      <button class="am-show-sm-only">test</button>
       <logo/>
-      <span style="flex-grow:1"/>
       <user/>
     </div>
-    <div class="body">
-      <my-nav class="aside" :items="navs"></my-nav>
-      <div class="body">
-        <ol class="am-breadcrumb">
+    <div class="body am-scrollable-horizontal">
+      <my-nav class="aside am-hide-sm-only" :items="navs"></my-nav>
+      <div class="body am-scrollable-vertical">
+        <ol class="am-breadcrumb am-hide-sm-only">
           <li v-for="(title,index) in breadcrumbTltles" :key="index">
             <a href="#"
               :class="{
@@ -19,12 +19,13 @@
             </a>
           </li>
         </ol>
-        <router-view style="padding:6px;display:flex;height:100%"/>
+        <router-view class="view" style="display:flex;height:100%"/>
       </div>
     </div>
   </div>
 </template>
 <style lang="less" scoped>
+@import "amazeui/less/variables.less";
 #flex-full{
   flex-grow:1;
 }
@@ -38,7 +39,8 @@
   >.header{
     padding:15px;
     height:60px;
-    #flex-container
+    #flex-container;
+    justify-content: space-between;
   }
   >.body{
     #flex-full;
@@ -54,11 +56,17 @@
       #flex-full;
       #flex-container;
       flex-direction:column;
-      
+      height:100%;
       >.am-breadcrumb{
         height:3em;
         background-color:#ebebeb;
         margin:0;
+      }
+      >.view{
+        padding:6px;
+        @media @small-only{
+          padding:0;
+        }
       }
     }
   }
