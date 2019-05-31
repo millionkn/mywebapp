@@ -6,19 +6,7 @@
       <user/>
     </div>
     <div class="body">
-      <div class="aside">
-        <ul class="am-nav">
-          <li><router-link to="/">控制台</router-link></li>
-          <li class="am-nav-divider"></li>
-          <!-- 管理员功能 -->
-          <li><router-link to="/users">用户管理</router-link></li>
-          <li><router-link to="/suppliers">供应商管理</router-link></li>
-          <li><router-link to="/offices">科室管理</router-link></li>
-          <li class="am-nav-divider"></li>
-          <!-- 特定人员功能 -->
-          <li><router-link to="/drivers">设备</router-link></li>
-        </ul>
-      </div>
+      <my-nav class="aside" :items="navs"></my-nav>
       <div class="body">
         <ol class="am-breadcrumb">
           <li v-for="(title,index) in breadcrumbTltles" :key="index">
@@ -61,13 +49,6 @@
       border-right:1px solid #cecece;
       width:240px;
       #flex-container;
-      >.am-nav{
-        #flex-full;
-        align-items:stretch;
-        :first-child{
-          margin-top:1em;
-        }
-      }
     }
     >.body{
       #flex-full;
@@ -93,13 +74,32 @@ import {
 } from "element-ui";
 import Logo from '@/components/logo.vue';
 import User from '@/components/User.vue';
+import MyNav from '@/components/Nav.vue';
+import {
+  Args as NavArgs,
+  Item,Divider,
+} from '@/components/Nav.vue';
 export default Vue.extend({
+  data(){
+    return {
+      navs:<NavArgs>[
+        new Item('控制台','/'),
+        new Divider(),
+        new Item('用户管理','/users'),
+        new Item('供应商管理','/suppliers'),
+        new Item('科室管理','/offices'),
+        new Divider(),
+        new Item('设备管理','/drivers'),
+      ],
+    };
+  },
   components: {
     elContainer,
     elHeader,
     elAside,
     Logo,
     User,
+    MyNav,
   },
   computed:{
     breadcrumbTltles(){
