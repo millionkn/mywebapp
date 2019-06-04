@@ -4,20 +4,7 @@
       <header class="am-panel-hd">
         <h3 class="am-panel-title">登录</h3>
       </header>
-      <form class="am-panel-bd" @submit.prevent="login" ref="loadingFrom">
-        <div class="am-input-group am-input-group-secondary">
-          <span class="am-input-group-label">
-            <i class="am-icon-user am-icon-fw"></i>
-          </span>
-          <input v-model="username" type="text" class="am-form-field" placeholder="Username">
-        </div>
-        <br>
-        <div class="am-input-group am-input-group-secondary">
-          <span class="am-input-group-label">
-            <i class="am-icon-lock am-icon-fw"></i>
-          </span>
-          <input v-model="password" type="password" class="am-form-field" placeholder="Password">
-        </div>
+      <my-form :items="items" @submit="login" ref="loading" id="test">
         <div class="save-me">
           <div class="am-checkbox">
             <label>
@@ -26,7 +13,7 @@
           </div>
           <button class="am-btn am-btn-secondary" type="submit">登录</button>
         </div>
-      </form>
+      </my-form>
     </div>
   </div>
 </template>
@@ -48,26 +35,39 @@
 </style>
 <script lang="ts">
 import Vue from "vue";
-import {Loading} from 'element-ui';
+import { Loading } from "element-ui";
+import {Item} from "@/components/Form.vue";
+
 export default Vue.extend({
+  components: {
+    myForm:() => import("@/components/Form.vue"),
+  },
   data() {
     return {
       savePassword:<true|false>false,
-      username: <string | undefined>undefined,
-      password: <string | undefined>undefined
+      items:<Item[]>[
+        {
+          icon:'am-icon-user',
+          type:'text',
+          label:'用户名',
+          name:'username',
+        },
+        {
+          icon:'am-icon-lock',
+          type:'password',
+          label:'密码',
+          name:'password',
+        },
+      ]
     };
   },
   methods: {
-    async login() {
+    async login(formData:any) {
       let loading = Loading.service({
-        'target':<HTMLElement>this.$refs.loadingFrom
-      })
-      await this.$store
-        .dispatch("login", {
-          username: this.username,
-          password: this.password
-        })
-        .then(() => this.$router.back());
+         target: <HTMLElement>(<Vue>this.$refs['loading']).$el
+      });
+      await this.$store.dispatch("login", formData);
+      this.$router.back();
       loading.close();
     }
   }
