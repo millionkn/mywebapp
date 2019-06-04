@@ -13,7 +13,6 @@ export default (async (env) => {
         role:"测试者",
       }
     }
-    console.log(obj);
   });
   mock.mock('/loginOut','post',undefined);
   mock.mock('/data/console', () => {
