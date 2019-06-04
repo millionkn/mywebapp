@@ -1,5 +1,5 @@
 <template>
-  <div class="root">
+  <contioner>
     <div class="am-panel am-panel-default">
       <header class="am-panel-hd">
         <h3 class="am-panel-title">登录</h3>
@@ -15,56 +15,48 @@
         </div>
       </my-form>
     </div>
-  </div>
+  </contioner>
 </template>
 <style lang="less" scoped>
-.root {
-  display: block;
-  justify-content: center;
-  align-items: center;
-  > .am-panel {
-    > .am-panel-bd {
-      > .save-me {
-        margin-top: 1em;
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
-  }
+.save-me {
+  margin-top: 1em;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
 <script lang="ts">
 import Vue from "vue";
 import { Loading } from "element-ui";
-import {Item} from "@/components/Form.vue";
+import { Item } from "@/components/Form.vue";
 
 export default Vue.extend({
   components: {
-    myForm:() => import("@/components/Form.vue"),
+    contioner: () => import("@/components/Contioner.vue"),
+    myForm: () => import("@/components/Form.vue"),
   },
   data() {
     return {
-      savePassword:<true|false>false,
-      items:<Item[]>[
+      savePassword: <true | false>false,
+      items: <Item[]>[
         {
-          icon:'am-icon-user',
-          type:'text',
-          label:'用户名',
-          name:'username',
+          icon: "am-icon-user",
+          type: "text",
+          label: "用户名",
+          name: "username"
         },
         {
-          icon:'am-icon-lock',
-          type:'password',
-          label:'密码',
-          name:'password',
-        },
+          icon: "am-icon-lock",
+          type: "password",
+          label: "密码",
+          name: "password"
+        }
       ]
     };
   },
   methods: {
-    async login(formData:any) {
+    async login(formData: any) {
       let loading = Loading.service({
-         target: <HTMLElement>(<Vue>this.$refs['loading']).$el
+        target: <HTMLElement>(<Vue>this.$refs["loading"]).$el
       });
       await this.$store.dispatch("login", formData);
       this.$router.back();
