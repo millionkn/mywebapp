@@ -19,7 +19,7 @@
             </a>
           </li>
         </ol>
-        <router-view class="view" style="display:flex;height:100%"/>
+        <router-view class="view"/>
       </div>
     </div>
   </div>
@@ -67,6 +67,9 @@
         @media @small-only{
           padding:0;
         }
+        display:flex;
+        height:100%;
+        flex-direction:column;
       }
     }
   }
