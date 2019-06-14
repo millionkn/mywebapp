@@ -15,10 +15,13 @@ type TableOpt<Instance> = {
   }) => Promise<{
     data: Instance[],
     total: number,
-  }>
+  }>,
+  rowClassName?: KeysWhichValueTypeIs<Instance, () => (string[])>,
 };
 export const TableSymbol = Symbol('table');
-export function tableModel<I extends Object>(opt: TableOpt<I>) {
+export function tableModel<I extends
+  & { [X in KeysWhichValueTypeIs<I, () => (string[])>]: () => (string[]) }
+>(opt: TableOpt<I>) {
   return (klass: Class<I>) => {
     let renders = (Reflect.getMetadata(TableSymbol, klass) || []) as Render[];
     Model(Vue.extend({
@@ -26,7 +29,8 @@ export function tableModel<I extends Object>(opt: TableOpt<I>) {
         return create(Table, {
           props: {
             data: this.data,
-            rowKey: opt.key
+            rowKey: opt.key,
+            rowClassName: this.rowClassName
           },
           ref: "ref",
         }, renders.map(render => render(create, ...args)));
@@ -35,6 +39,13 @@ export function tableModel<I extends Object>(opt: TableOpt<I>) {
         return {
           data: [] as I[],
           total: 0 as number,
+        }
+      },
+      methods: {
+        rowClassName(args: { row: I, rowIndex: string }) {
+          if (opt.rowClassName) {
+            return args.row[opt.rowClassName]()
+          }
         }
       },
       async mounted() {
