@@ -5,9 +5,9 @@ import { getModelView } from '@/decorators/model2view';
 
 type TimeStamp = number;
 type TurnAround = number;
-@tableModel<HomeInfo>({
+@tableModel({
   key: 'id',
-  async request(opts: {}) {
+  async request(opts) {
     return (await axios.get('/data/console')).data as {
       data: HomeInfo[],
       total: 0,
