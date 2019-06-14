@@ -21,7 +21,7 @@ export const TableSymbol = Symbol('table');
 export function tableModel<I extends Object>(opt: TableOpt<I>) {
   return (klass: Class<I>) => {
     let renders = (Reflect.getMetadata(TableSymbol, klass) || []) as Render[];
-    return Model(Vue.extend({
+    Model(Vue.extend({
       render(create, ...args): VNode {
         return create(Table, {
           props: {
