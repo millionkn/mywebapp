@@ -1,7 +1,7 @@
 import { tableModel, tableColumn } from "@/decorators/model2view/table";
 import { getModelView } from '@/decorators/model2view';
 @tableModel({
-  key: 'str2',
+  key: 'str',
   async request() {
     return {
       data: [5, 7, 9].map((i) => {

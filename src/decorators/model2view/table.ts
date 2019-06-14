@@ -4,9 +4,11 @@ import { Model, Render } from './index';
 import { Table, TableColumn } from 'element-ui';
 
 type Class<Instance> = { new(...args: any[]): Instance };
-
+type KeysWhichValueTypeIs<C, ValueType> = {
+  [K in keyof C]: C[K] extends ValueType ? K : never
+}[keyof C];
 type TableOpt<Instance> = {
-  key: keyof Instance,
+  key: KeysWhichValueTypeIs<Instance, string>,
   request: (opt: {
     start: number,
     length: number,
@@ -23,7 +25,8 @@ export function tableModel<I extends Object>(opt: TableOpt<I>) {
       render(create, ...args): VNode {
         return create(Table, {
           props: {
-            data: this.data
+            data: this.data,
+            rowKey: opt.key
           },
           ref: "ref",
         }, renders.map(render => render(create, ...args)));
@@ -51,6 +54,8 @@ type tableItemOption = {
   label: string,
   showFilter?: boolean,
 };
+export function tableColumn(arg: Render): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
+export function tableColumn(arg: tableItemOption): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
 export function tableColumn(arg: Render | tableItemOption) {
   return <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => {
     let renders = Reflect.getMetadata(TableSymbol, target.constructor) as Render[];
