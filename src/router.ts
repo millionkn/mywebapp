@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Empty from "@/components/Empty.vue";
-import { getModelView } from './decorators/table';
 
 Vue.use(Router);
 export default new Router({
@@ -25,7 +24,7 @@ export default new Router({
     },
     {
       path: '/decorators',
-      component: () => getModelView(import('@/model/Test'))
+      component: () => import('@/model/Test')
     },
     {
       path: "/",

@@ -1,5 +1,5 @@
-import { tableModel, tableColumn } from "@/decorators/table";
-
+import { tableModel, tableColumn } from "@/decorators/model2view/table";
+import { getModelView } from '@/decorators/model2view';
 @tableModel({
   key: 'str2',
   async request() {
@@ -13,13 +13,12 @@ import { tableModel, tableColumn } from "@/decorators/table";
     }
   }
 })
-export default class A {
+class A {
   @tableColumn({ label: '方法' })
   str2() {
     return this.str + "2"
   }
   @tableColumn({ label: '字符串' })
   str!: string;
-
 }
-
+export default getModelView(A);

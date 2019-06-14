@@ -1,14 +1,11 @@
-import 'reflect-metadata';
-import { Table, Loading, TableColumn } from 'element-ui';
 import Vue, { VNode } from 'vue';
-import { ComponentOptions } from 'vue/types/options';
+import { Loading } from 'element-ui';
+import { Model, Render } from './index';
+import { Table, TableColumn } from 'element-ui';
 
-type TableModel<Instance> = {
-  new(...args: any[]): Instance;
-};
-type Render = NonNullable<ComponentOptions<Vue>['render']>;
+type Class<Instance> = { new(...args: any[]): Instance };
 
-type tableModelOpt<Instance> = {
+type TableOpt<Instance> = {
   key: keyof Instance,
   request: (opt: {
     start: number,
@@ -16,15 +13,14 @@ type tableModelOpt<Instance> = {
   }) => Promise<{
     data: Instance[],
     total: number,
-  }>;
-}
-const tableModelTemplateSymbol = Symbol('tableModel template');
-export function tableModel<Instance>(opt: tableModelOpt<Instance>) {
-  return (klass: TableModel<Instance>) => {
-    let template = Vue.extend({
+  }>
+};
+export const TableSymbol = Symbol('table');
+export function tableModel<I extends Object>(opt: TableOpt<I>) {
+  return (klass: Class<I>) => {
+    let renders = (Reflect.getMetadata(TableSymbol, klass) || []) as Render[];
+    return Model(Vue.extend({
       render(create, ...args): VNode {
-        let renders = Reflect.getMetadata(columnRenderSymbol, klass) as Render[]
-        renders = renders || [];
         return create(Table, {
           props: {
             data: this.data
@@ -34,7 +30,7 @@ export function tableModel<Instance>(opt: tableModelOpt<Instance>) {
       },
       data() {
         return {
-          data: [] as Instance[],
+          data: [] as I[],
           total: 0 as number,
         }
       },
@@ -46,23 +42,19 @@ export function tableModel<Instance>(opt: tableModelOpt<Instance>) {
         this.data.splice(0, this.data.length, ...response.data);
         loading.close();
       }
-    });
-    Reflect.defineMetadata(tableModelTemplateSymbol, template, klass);
+    }))(klass);
   }
-}
+};
 
-const columnRenderSymbol = Symbol('tableItem');
+
 type tableItemOption = {
   label: string,
   showFilter?: boolean,
 };
-//type MDecorator<T> = (target: T, key: symbol | Exclude<keyof T, number>)=> void;
-//export function tableColumn<T>(render: Render):MDecorator<T extends Object ? T :never>
-//export function tableColumn<T>(opt: tableItemOption):MDecorator<T extends Object ? T :never>
 export function tableColumn(arg: Render | tableItemOption) {
-  return <Instance extends Object>(target: Instance, key: keyof Instance) => {
-    let renders = Reflect.getMetadata(columnRenderSymbol, target.constructor) as Render[];
-    if (!renders) { Reflect.defineMetadata(columnRenderSymbol, renders = [], target.constructor) }
+  return <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => {
+    let renders = Reflect.getMetadata(TableSymbol, target.constructor) as Render[];
+    if (!renders) { Reflect.defineMetadata(TableSymbol, renders = [], target.constructor) }
     let render: Render;
     if (typeof arg === 'function') {
       render = arg;
@@ -93,7 +85,4 @@ export function tableColumn(arg: Render | tableItemOption) {
     }
     renders.push(render);
   };
-};
-export async function getModelView<T>(klass: Promise<{ default: TableModel<T> }>) {
-  return Reflect.getMetadata(tableModelTemplateSymbol, (await klass).default) as ReturnType<typeof Vue.extend>
 };

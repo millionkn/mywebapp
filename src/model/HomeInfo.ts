@@ -1,6 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
-import { tableColumn, tableModel } from '@/decorators/table';
+import { tableModel, tableColumn } from '@/decorators/model2view/table';
+import { getModelView } from '@/decorators/model2view';
 
 type TimeStamp = number;
 type TurnAround = number;
@@ -13,7 +14,7 @@ type TurnAround = number;
     };
   }
 })
-export class HomeInfo {
+class HomeInfo {
   id!: string;
   @tableColumn({ label: '科室', showFilter: true, }) office!: string;
   @tableColumn({ label: '名称', }) name!: string;
@@ -35,3 +36,4 @@ export class HomeInfo {
     return this.inspectionTimes - daysAfterLastCheck;
   }
 }
+export default getModelView(HomeInfo);
