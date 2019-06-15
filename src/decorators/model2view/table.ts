@@ -68,7 +68,9 @@ type tableItemOption = {
 export function tableColumn(arg: Render): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
 export function tableColumn(arg: tableItemOption): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
 export function tableColumn(arg: Render | tableItemOption) {
-  return <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => {
+  return <Instance extends
+    & { [K in KeysWhichValueTypeIs<Instance, () => string>]: () => string }
+  >(target: Instance, key: KeysWhichValueTypeIs<Instance, () => string>) => {
     let renders = Reflect.getMetadata(TableSymbol, target.constructor) as Render[];
     if (!renders) { Reflect.defineMetadata(TableSymbol, renders = [], target.constructor) }
     let render: Render;
@@ -82,7 +84,7 @@ export function tableColumn(arg: Render | tableItemOption) {
               label: arg.label
             },
             scopedSlots: {
-              default(props) {
+              default(props: { row: Instance }) {
                 return create('div', props.row[key]())
               }
             }
