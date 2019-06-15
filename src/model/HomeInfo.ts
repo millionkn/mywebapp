@@ -34,5 +34,5 @@ export default Table.conver(HomeInfo, {
       data: HomeInfo[],
       total: 0,
     };
-  }
+  },
 });

@@ -1,13 +1,15 @@
 import * as View from '.';
 import Vue, { VNode } from 'vue';
 import { Table, Loading, TableColumn } from 'element-ui';
-import { KeysWhichValueTypeIs, ClassOf, Render } from 'types/types';
+import { KeysWhichValueTypeIs, ClassOf, Render, mayHaveValueTyped } from 'types/types';
 
 export const symbol: unique symbol = Symbol("table");
-
-export function conver<I extends
-  & { [X in KeysWhichValueTypeIs<I, () => (string[])>]: () => (string[]) }
->(klass: ClassOf<I>, opt: {
+export function conver<
+  I extends InstanceType<C>
+  & mayHaveValueTyped<I, () => string[]>
+  ,C extends ClassOf<I>
+  & mayHaveValueTyped<C, (selection: I[]) => void>
+>(klass: C, opt: {
   key: KeysWhichValueTypeIs<I, string>,
   request: (opt: {
     start: number,
@@ -16,7 +18,8 @@ export function conver<I extends
     data: I[],
     total: number,
   }>,
-  rowClassName?: KeysWhichValueTypeIs<I, () => (string[])>,
+  rowClassName?: KeysWhichValueTypeIs<I, () => string[]>,
+  onselectionchange?: KeysWhichValueTypeIs<typeof klass, (selection: I[]) => void>,
 }): ReturnType<typeof View.conver> {
   let renderArr = (Reflect.getMetadata(symbol, klass) || []) as Render[];
   return Vue.extend({
@@ -25,11 +28,16 @@ export function conver<I extends
         props: {
           data: this.data,
           rowKey: opt.key,
-          rowClassName: this.rowClassName
+          rowClassName: this.rowClassName,
+        },
+        on: {
+          onselectionchange(selection: I[]) {
+             let key = opt.onselectionchange;
+             if (key) { let m = klass[key](selection) }
+          },
         },
         ref: "ref",
       }, renderArr.map((render) => render(create, ...args)));
-
     },
     data() {
       return {
@@ -42,7 +50,7 @@ export function conver<I extends
         if (opt.rowClassName) {
           return args.row[opt.rowClassName]()
         }
-      }
+      },
     },
     async mounted() {
       let table = (this.$refs['ref'] as Vue).$el as HTMLElement;

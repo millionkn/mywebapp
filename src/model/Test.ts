@@ -1,5 +1,6 @@
 import * as Table from "@/decorators/model2view/table";
 import { TableColumn } from 'element-ui';
+import { KeysWhichValueTypeIs } from 'types/types';
 
 
 class A {
@@ -20,13 +21,17 @@ class A {
     });
   })
   str!: string;
-  str3() {
-    return ["testClass"];
+  static str3(selection: A[]) {
+  };
+  str4() {
+    return ['testv']
   }
 }
+//let x:KeysWhichValueTypeIs<typeof A, (selection: A[]) => void>
 export default Table.conver(A, {
   key: 'str',
-  rowClassName: 'str3',
+  onselectionchange: 'str3',
+  rowClassName: "str4",
   async request() {
     return {
       data: [5, 7, 9].map((i) => {
