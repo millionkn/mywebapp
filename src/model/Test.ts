@@ -1,6 +1,30 @@
-import { tableModel, tableColumn } from "@/decorators/model2view/table";
-import { getModelView } from '@/decorators/model2view';
-@tableModel({
+import * as Table from "@/decorators/model2view/table";
+import { TableColumn } from 'element-ui';
+
+
+class A {
+  @Table.tableColumn({ label: '方法' })
+  str2() {
+    return this.str + "2"
+  }
+  @Table.tableColumn((create, context) => {
+    return create(TableColumn, {
+      props: {
+        label: "自定义模板"
+      },
+      scopedSlots: {
+        default(props: { row: A }) {
+          return create('div', props.row.str);
+        }
+      }
+    });
+  })
+  str!: string;
+  str3() {
+    return ["testClass"];
+  }
+}
+export default Table.conver(A, {
   key: 'str',
   rowClassName: 'str3',
   async request() {
@@ -14,22 +38,3 @@ import { getModelView } from '@/decorators/model2view';
     }
   }
 })
-class A {
-  @tableColumn({ label: '方法' })
-  str2() {
-    return this.str + "2"
-  }
-  @tableColumn({ label: '字符串' })
-  str!: string;
-  str3() {
-    return ["testClass"];
-  }
-}
-export default getModelView(A);
-
-type KeysWhichValueTypeIs<C, ValueType> = {
-  [K in keyof C]: C[K] extends ValueType ? K : never
-}[keyof C];
-
-let a: KeysWhichValueTypeIs<A, () => (string)> = 'str2'
-let b = new A()[a]

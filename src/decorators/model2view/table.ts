@@ -1,78 +1,72 @@
+import * as View from '.';
 import Vue, { VNode } from 'vue';
-import { Loading } from 'element-ui';
-import { Model, Render } from './index';
-import { Table, TableColumn } from 'element-ui';
+import { Table, Loading, TableColumn } from 'element-ui';
+import { KeysWhichValueTypeIs, ClassOf, Render } from 'types/types';
 
-type Class<Instance> = { new(...args: any[]): Instance };
-type KeysWhichValueTypeIs<C, ValueType> = {
-  [K in keyof C]: C[K] extends ValueType ? K : never
-}[keyof C];
-type TableOpt<Instance> = {
-  key: KeysWhichValueTypeIs<Instance, string>,
+export const symbol: unique symbol = Symbol("table");
+
+export function conver<I extends
+  & { [X in KeysWhichValueTypeIs<I, () => (string[])>]: () => (string[]) }
+>(klass: ClassOf<I>, opt: {
+  key: KeysWhichValueTypeIs<I, string>,
   request: (opt: {
     start: number,
     length: number,
   }) => Promise<{
-    data: Instance[],
+    data: I[],
     total: number,
   }>,
-  rowClassName?: KeysWhichValueTypeIs<Instance, () => (string[])>,
-};
-export const TableSymbol = Symbol('table');
-export function tableModel<I extends
-  & { [X in KeysWhichValueTypeIs<I, () => (string[])>]: () => (string[]) }
->(opt: TableOpt<I>) {
-  return (klass: Class<I>) => {
-    let renders = (Reflect.getMetadata(TableSymbol, klass) || []) as Render[];
-    Model(Vue.extend({
-      render(create, ...args): VNode {
-        return create(Table, {
-          props: {
-            data: this.data,
-            rowKey: opt.key,
-            rowClassName: this.rowClassName
-          },
-          ref: "ref",
-        }, renders.map(render => render(create, ...args)));
-      },
-      data() {
-        return {
-          data: [] as I[],
-          total: 0 as number,
-        }
-      },
-      methods: {
-        rowClassName(args: { row: I, rowIndex: string }) {
-          if (opt.rowClassName) {
-            return args.row[opt.rowClassName]()
-          }
-        }
-      },
-      async mounted() {
-        let table = (this.$refs['ref'] as Vue).$el as HTMLElement;
-        let loading = Loading.service({ target: table, text: "数据加载中" });
-        let response = await opt.request({ start: 0, length: 10 });
-        this.total = response.total;
-        this.data.splice(0, this.data.length, ...response.data);
-        loading.close();
-      }
-    }))(klass);
-  }
-};
+  rowClassName?: KeysWhichValueTypeIs<I, () => (string[])>,
+}): ReturnType<typeof View.conver> {
+  let renderArr = (Reflect.getMetadata(symbol, klass) || []) as Render[];
+  return Vue.extend({
+    render(create, ...args): VNode {
+      return create(Table, {
+        props: {
+          data: this.data,
+          rowKey: opt.key,
+          rowClassName: this.rowClassName
+        },
+        ref: "ref",
+      }, renderArr.map((render) => render(create, ...args)));
 
+    },
+    data() {
+      return {
+        data: [] as I[],
+        total: 0 as number,
+      }
+    },
+    methods: {
+      rowClassName(args: { row: I, rowIndex: string }) {
+        if (opt.rowClassName) {
+          return args.row[opt.rowClassName]()
+        }
+      }
+    },
+    async mounted() {
+      let table = (this.$refs['ref'] as Vue).$el as HTMLElement;
+      let loading = Loading.service({ target: table, text: "数据加载中" });
+      let response = await opt.request({ start: 0, length: 10 });
+      this.total = response.total;
+      this.data.splice(0, this.data.length, ...response.data);
+      loading.close();
+    }
+  })
+}
 
 type tableItemOption = {
   label: string,
   showFilter?: boolean,
 };
-export function tableColumn(arg: Render): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
-export function tableColumn(arg: tableItemOption): <Instance extends { [pro in keyof Instance]: any }>(target: Instance, key: keyof Instance) => void
+export function tableColumn(arg: Render): <I extends { [pro in keyof I]: any }>(target: I, key: keyof I) => void;
+export function tableColumn(arg: tableItemOption): <I extends { [pro in keyof I]: any }>(target: I, key: keyof I) => void;
 export function tableColumn(arg: Render | tableItemOption) {
-  return <Instance extends
-    & { [K in KeysWhichValueTypeIs<Instance, () => string>]: () => string }
-  >(target: Instance, key: KeysWhichValueTypeIs<Instance, () => string>) => {
-    let renders = Reflect.getMetadata(TableSymbol, target.constructor) as Render[];
-    if (!renders) { Reflect.defineMetadata(TableSymbol, renders = [], target.constructor) }
+  return <I extends
+    & { [K in KeysWhichValueTypeIs<I, () => string>]: () => string }
+  >(target: I, key: KeysWhichValueTypeIs<I, () => string>) => {
+    let renderArr = Reflect.getMetadata(symbol, target.constructor) as Render[];
+    if (!renderArr) { Reflect.defineMetadata(symbol, renderArr = [], target.constructor) }
     let render: Render;
     if (typeof arg === 'function') {
       render = arg;
@@ -84,23 +78,23 @@ export function tableColumn(arg: Render | tableItemOption) {
               label: arg.label
             },
             scopedSlots: {
-              default(props: { row: Instance }) {
+              default(props: { row: I }) {
                 return create('div', props.row[key]())
               }
             }
-          });
+          })
         }
       } else {
-        render = (create, conext) => {
+        render = (create, context) => {
           return create(TableColumn, {
             props: {
               label: arg.label,
               prop: key,
             },
-          });
+          })
         }
       }
     }
-    renders.push(render);
+    renderArr.push(render);
   };
 };
