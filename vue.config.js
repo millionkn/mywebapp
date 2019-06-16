@@ -28,6 +28,7 @@ module.exports = {
             app.get('/data/console', (req, res) => {
                 res.send([
                     {
+                        id : 1,
                         office: "科室A",
                         name: "仪器A1",
                         buyDate: new Date().valueOf(),
@@ -36,6 +37,7 @@ module.exports = {
                         line: 3,
                     },
                     {
+                        id: 2,
                         office: "科室A",
                         name: "仪器A1",
                         buyDate: new Date().valueOf(),
@@ -46,6 +48,7 @@ module.exports = {
                         line: 3,
                     },
                     {
+                        id: 3,
                         office: "科室B",
                         name: "仪器B1",
                         buyDate: new Date().valueOf(),

@@ -71,8 +71,6 @@
   align-items: stretch;
 }
 .home {
-  flex-grow: 1;
-  flex-direction: column;
   > .am-panel {
     flex-grow: 1;
     > .am-panel-hd {
