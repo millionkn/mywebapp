@@ -1,4 +1,3 @@
-let moment = require('moment');
 let path = require("path");
 let bodyParser = require('body-parser');
 module.exports = {
@@ -26,39 +25,10 @@ module.exports = {
             });
             app.post('/loginOut', (req, res) => { res.send(undefined) });
             app.get('/data/console', (req, res) => {
-                res.send([
-                    {
-                        id : 1,
-                        office: "科室A",
-                        name: "仪器A1",
-                        buyDate: new Date().valueOf(),
-                        lastCheck: new Date().valueOf(),
-                        inspectionTimes: 7,
-                        line: 3,
-                    },
-                    {
-                        id: 2,
-                        office: "科室A",
-                        name: "仪器A1",
-                        buyDate: new Date().valueOf(),
-                        lastCheck: moment().add({
-                            day: -4,
-                        }).valueOf(),
-                        inspectionTimes: 7,
-                        line: 3,
-                    },
-                    {
-                        id: 3,
-                        office: "科室B",
-                        name: "仪器B1",
-                        buyDate: new Date().valueOf(),
-                        lastCheck: moment().add({
-                            day: -6,
-                        }).valueOf(),
-                        inspectionTimes: 7,
-                        line: 5,
-                    },
-                ])
+                res.send(require("./testData/console.js"));
+            });
+            app.get('/data/users', (req, res) => {
+                res.send(require("./testData/users.js"));
             });
         }
     }
