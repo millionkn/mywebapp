@@ -10,30 +10,37 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: ()=>import('./views/Home.vue'),
-      meta:{
-        breadcrumbTltle:"控制台",
+      component: () => import('./views/Home.vue'),
+      meta: {
+        breadcrumbTltle: "控制台",
       },
     },
     {
-      path:"/login",
-      component:()=>import('./views/Login.vue'),
-      meta:{
-        breadcrumbTltle:"登录",
+      path: "/login",
+      component: () => import('./views/Login.vue'),
+      meta: {
+        breadcrumbTltle: "登录",
       },
     },
     {
-      path:"/",
-      component:Empty,
-      meta:{
-        breadcrumbTltle:"管理",
+      path: "/",
+      component: Empty,
+      meta: {
+        breadcrumbTltle: "管理",
       },
-      children:[
+      children: [
         {
-          path:"users",
-          component:()=>import('./views/Users.vue'),
-          meta:{
-            breadcrumbTltle:"用户",
+          path: "users",
+          component: () => import('./views/Users.vue'),
+          meta: {
+            breadcrumbTltle: "用户",
+          }
+        },
+        {
+          path: "suppliers",
+          component: () => import('./views/Suppliers.vue'),
+          meta: {
+            breadcrumbTltle: "供应商",
           }
         },
       ],

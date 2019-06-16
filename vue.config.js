@@ -30,6 +30,9 @@ module.exports = {
             app.get('/data/users', (req, res) => {
                 res.send(require("./testData/users.js"));
             });
+            app.get('/data/suppliers', (req, res) => {
+                res.send(require("./testData/suppliers.js"));
+            });
         }
     }
 }
