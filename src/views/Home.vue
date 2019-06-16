@@ -16,58 +16,40 @@
           <button type="button" class="am-btn am-btn-primary am-round">导入</button>
         </div>
         <div class="am-btn-group">
-          <button
-            type="button"
-            class="am-btn am-btn-success am-round"
-            @click="makesureCheck"
-          >确认检修</button>
+          <button type="button" class="am-btn am-btn-success am-round" @click="makesureCheck">确认检修</button>
           <button type="button" class="am-btn am-btn-danger am-round">删除</button>
         </div>
       </div>
       <div class="am-panel-bd">
-        <el-table
-          id="table"
-          :data="tableData"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column
-            type="selection"
-            width="55"
-          >
-          </el-table-column>
+        <el-table id="table" :data="tableData" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column
             label="科室"
             prop="office"
             :filters="findFilters()"
             :filter-method="filterHandler"
-          >
-          </el-table-column>
-          <el-table-column label="仪器名称" prop="name">
-          </el-table-column>
+          ></el-table-column>
+          <el-table-column label="仪器名称" prop="name"></el-table-column>
           <el-table-column label="购买日期">
-            <template #default="scope">
-              {{dateOf(scope.row)}}
-            </template>
+            <template #default="scope">{{dateOf(scope.row)}}</template>
           </el-table-column>
           <el-table-column label="上次年检时间" prop="lastTime">
-            <template #default="scope">
-              {{dateOf(scope.row)}}
-            </template>
+            <template #default="scope">{{dateOf(scope.row)}}</template>
           </el-table-column>
-          <el-table-column label="年检周期" prop="inspectionTimes">
-          </el-table-column>
+          <el-table-column label="年检周期" prop="inspectionTimes"></el-table-column>
           <el-table-column label="距离下次检测">
             <template #default="scope">
-              <span :class="scope.row.line>=(scope.row.inspectionTimes-daysAfterLastCheck(scope.row)) ? 'danger' : 'normal'">
-                {{scope.row.inspectionTimes-daysAfterLastCheck(scope.row)}}
-              </span>
+              <span
+                :class="scope.row.line>=(scope.row.inspectionTimes-daysAfterLastCheck(scope.row)) ? 'danger' : 'normal'"
+              >{{scope.row.inspectionTimes-daysAfterLastCheck(scope.row)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="提前预警" prop="line">
-          </el-table-column>
+          <el-table-column label="提前预警" prop="line"></el-table-column>
           <el-table-column label="详情">
             <template #default="scope">
-              <span :class="'text-button'"><a href="#">详情</a></span>
+              <span :class="'text-button'">
+                <a href="#">详情</a>
+              </span>
             </template>
           </el-table-column>
         </el-table>
@@ -76,14 +58,14 @@
   </div>
 </template>
 <style lang="less" scoped>
-.danger{
-  color: #F56C6C;
+.danger {
+  color: #f56c6c;
 }
-.normal{
-  color:#409EFF;
+.normal {
+  color: #409eff;
 }
-.text-button{
-  color:#67C23A;
+.text-button {
+  color: #67c23a;
 }
 #full {
   align-items: stretch;
@@ -106,65 +88,65 @@
 
 <script lang="ts">
 import Vue from "vue";
-import moment from 'moment';
-import axios from 'axios';
+import moment from "moment";
+import axios from "axios";
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
-  Loading,
+  Loading
 } from "element-ui";
-type TimeStamp=number;
-type Turnaround=number;
-type TableRow={
-  office:string,
-  name:string,
-  buyDate:TimeStamp,
-  lastCheck:TimeStamp,
-  inspectionTimes:Turnaround,
-  line:Turnaround,
+type TimeStamp = number;
+type Turnaround = number;
+type TableRow = {
+  office: string;
+  name: string;
+  buyDate: TimeStamp;
+  lastCheck: TimeStamp;
+  inspectionTimes: Turnaround;
+  line: Turnaround;
 };
-let selectedRow:Array<TableRow> = [];
+let selectedRow: Array<TableRow> = [];
 export default Vue.extend({
   components: {
     ElTable,
-    ElTableColumn,
+    ElTableColumn
   },
   data() {
     return {
-      office: <string|undefined>undefined,
-      driverName: <string|undefined>undefined,
-      tableData:<Array<TableRow>>[],
+      office: <string | undefined>undefined,
+      driverName: <string | undefined>undefined,
+      tableData: <Array<TableRow>>[]
     };
   },
-  methods:{
-    dateOf:(row:TableRow)=>moment(row.buyDate).format("YYYY-M-D"),
-    daysAfterLastCheck:(row:TableRow)=>Math.floor(moment.duration(new Date().valueOf()-row.lastCheck).asDays()),
-    makesureCheck(){
-      let data=new Date().valueOf();
-      selectedRow.forEach((row)=>row.lastCheck=data);
+  methods: {
+    dateOf: (row: TableRow) => moment(row.buyDate).format("YYYY-M-D"),
+    daysAfterLastCheck: (row: TableRow) =>
+      Math.floor(
+        moment.duration(new Date().valueOf() - row.lastCheck).asDays()
+      ),
+    makesureCheck() {
+      let data = new Date().valueOf();
+      selectedRow.forEach(row => (row.lastCheck = data));
     },
-    handleSelectionChange(selected:Array<TableRow>){
-      selectedRow=selected;
+    handleSelectionChange(selected: Array<TableRow>) {
+      selectedRow = selected;
     },
-    findFilters(){
-      return Array(...new Set(this.tableData.map((row)=>row.office)))
-      .map((office)=>{
-        return{
-          value:office,
-          text:office,
+    findFilters() {
+      return Array(...new Set(this.tableData.map(row => row.office))).map(
+        office => {
+          return {
+            value: office,
+            text: office
+          };
         }
-      })
+      );
     },
-    filterHandler:(value:string, row:TableRow)=>row.office===value,
+    filterHandler: (value: string, row: TableRow) => row.office === value
   },
-  mounted(){
-    (async ()=>{
-      let loading = Loading.service({
-        'target':'#table',
-      });
-      this.tableData = (await axios.get('/data/console')).data;
-      loading.close();
-    })();
+  async mounted() {
+    let loading = Loading.service({ target: "#table" });
+    this.tableData = (await axios.get("/data/console")).data;
+    loading.close();
   }
 });
 </script>
