@@ -1,5 +1,5 @@
 <template>
-  <table-shower table-data-url="/data/console" @successed="(arr)=>tableData=arr">
+  <table-shower table-data-url="/restAPI/drivers" @successed="(arr)=>tableData=arr">
     <template #panel-head="scope">
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="driverName">
@@ -21,17 +21,17 @@
     </template>
     <template #default="scope">
       <el-table
-        id="table"
         :data="tableData.filter(info=>info.name.includes(driverName))"
         @selection-change="arr=>selectedRow=arr"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column
           label="科室"
-          prop="office"
           :filters="findFilters()"
-          :filter-method="(value, row) => row.office === value"
-        ></el-table-column>
+          :filter-method="(value, row) => row.officeId === value"
+        >
+          <template #default="scope">{{offices[scope.row.officeId].name}}</template>
+        </el-table-column>
         <el-table-column label="仪器名称" prop="name"></el-table-column>
         <el-table-column label="购买日期">
           <template #default="scope">{{dateOf(scope.row)}}</template>
@@ -78,6 +78,7 @@
 import Vue from "vue";
 import moment from "moment";
 import TableShower from "@/components/TableShower.vue";
+import axios from "axios";
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
@@ -104,7 +105,8 @@ export default Vue.extend({
       office: undefined as string | undefined,
       driverName: "" as string,
       tableData: [] as TableRow[],
-      selectedRow: [] as TableRow[]
+      selectedRow: [] as TableRow[],
+      offices: [] as { id: number; name: string }[]
     };
   },
   methods: {
@@ -118,15 +120,13 @@ export default Vue.extend({
       this.selectedRow.forEach(row => (row.lastCheck = data));
     },
     findFilters() {
-      return Array(...new Set(this.tableData.map(row => row.office))).map(
-        office => {
-          return {
-            value: office,
-            text: office
-          };
-        }
+      return this.offices.map(
+        office => new Object({ value: office.id, text: office.name })
       );
     }
+  },
+  async mounted() {
+    this.offices = (await axios.get("/restAPI/offices")).data;
   }
 });
 </script>

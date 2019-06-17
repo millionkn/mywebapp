@@ -1,5 +1,5 @@
 <template>
-  <table-shower @successed="(data)=>tableData=data" table-data-url="/data/suppliers">
+  <table-shower @successed="(data)=>tableData=data" table-data-url="/restAPI/suppliers">
     <template #panel-head="scope">
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="supplierName">

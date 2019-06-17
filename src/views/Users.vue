@@ -1,5 +1,5 @@
 <template>
-  <table-shower @successed="loadSuccessedHandle" table-data-url="/data/users">
+  <table-shower @successed="(data)=>tableData=data" table-data-url="/restAPI/users">
     <template #panel-head="scope">
       <span style="flex-grow:1"></span>
       <button type="button" class="am-btn am-btn-primary am-round" @click="submitChange">提交修改</button>
@@ -14,15 +14,17 @@
         <el-table-column label="真实姓名" prop="personName"></el-table-column>
         <el-table-column label="科室">
           <template #default="scope">
-            <el-select v-model="scope.row.office" @change="changed.add(scope.row)">
-              <el-option v-for="(item,index) in office" :key="index" :label="item" :value="index"></el-option>
+            <el-select v-model="scope.row.officeId" @change="changed.add(scope.row)">
+              <el-option label="未指定" :value="-1"></el-option>
+              <el-option v-for="item in offices" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </template>
         </el-table-column>
         <el-table-column label="角色">
           <template #default="scope">
-            <el-select v-model="scope.row.role" @change="changed.push(scope.row)">
-              <el-option v-for="(item,index) in role" :key="index" :label="item" :value="index"></el-option>
+            <el-select v-model="scope.row.roleId" @change="changed.add(scope.row)">
+              <el-option label="未审核" :value="-1"></el-option>
+              <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -40,32 +42,29 @@ import {
   Select as ElSelect,
   Option as ElOption
 } from "element-ui";
-type TableData = {
+import axios from "axios";
+type User = {
   id: number;
   username: string;
-  personName: string;
-  office: number;
-  role: number;
+  name: string;
+  officeId: number;
+  roleId: number;
 };
+type Office = {
+  id: number;
+  name: string;
+};
+type Role = Office;
 export default Vue.extend({
   data() {
     return {
-      changed: new Set() as Set<TableData>,
-      role: [] as string[],
-      office: [] as string[],
-      tableData: [] as TableData[]
+      changed: new Set() as Set<User>,
+      tableData: [] as User[],
+      roles: [] as Role[],
+      offices: [] as Office[]
     };
   },
   methods: {
-    loadSuccessedHandle(obj: {
-      role: string[];
-      office: string[];
-      table: TableData[];
-    }) {
-      this.role = obj.role;
-      this.office = obj.office;
-      this.tableData = obj.table;
-    },
     submitChange() {
       this.changed.clear();
       this.$forceUpdate();
@@ -77,6 +76,10 @@ export default Vue.extend({
     ElSelect,
     ElOption,
     TableShower
+  },
+  async mounted() {
+    this.roles = (await axios.get("/restAPI/roles")).data;
+    this.offices = (await axios.get("/restAPI/offices")).data;
   }
 });
 </script>

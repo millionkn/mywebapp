@@ -24,15 +24,7 @@ module.exports = {
                 }
             });
             app.post('/loginOut', (req, res) => { res.send(undefined) });
-            app.get('/data/console', (req, res) => {
-                res.send(require("./testData/console.js"));
-            });
-            app.get('/data/users', (req, res) => {
-                res.send(require("./testData/users.js"));
-            });
-            app.get('/data/suppliers', (req, res) => {
-                res.send(require("./testData/suppliers.js"));
-            });
+            app.use('/restAPI', require('json-server').router(require('./testData/jsonServer.js')));
         }
     }
 }

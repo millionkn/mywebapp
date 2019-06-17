@@ -8,14 +8,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: () => import('./views/Home.vue'),
-      meta: {
-        breadcrumbTltle: "控制台",
-      },
-    },
-    {
       path: "/login",
       component: () => import('./views/Login.vue'),
       meta: {
@@ -29,6 +21,17 @@ export default new Router({
         breadcrumbTltle: "管理",
       },
       children: [
+        {
+          path: "/",
+          redirect: "/drivers",
+        },
+        {
+          path: 'drivers',
+          component: () => import('./views/Drivers.vue'),
+          meta: {
+            breadcrumbTltle: "设备管理",
+          },
+        },
         {
           path: "users",
           component: () => import('@/views/Users.vue'),
