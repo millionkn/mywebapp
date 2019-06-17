@@ -40,7 +40,11 @@ let suppliers = new Array(...Array(4)).map((n, id) => new Object({
   medicalDeviceBusinessLicense: `医疗器械经营许可证编号${id}`,
 }));
 let offices = ["科室A", "科室B", "检修科"]
-  .map((name, id) => new Object({ name, id }))
+  .map((name, id) => new Object({
+    name,
+    id,
+    userId: Math.floor(4 * Math.random()) - 1,
+  }))
 
 let roles = ["超管", "管理员", "员工"]
   .map((name, id) => new Object({ name, id }))

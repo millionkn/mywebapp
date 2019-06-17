@@ -46,6 +46,13 @@ export default new Router({
             breadcrumbTltle: "供应商",
           }
         },
+        {
+          path: "offices",
+          component: () => import('@/views/Offices.vue'),
+          meta: {
+            breadcrumbTltle: "科室",
+          }
+        },
       ],
     },
   ]
