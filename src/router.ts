@@ -31,14 +31,14 @@ export default new Router({
       children: [
         {
           path: "users",
-          component: () => import('./views/Users.vue'),
+          component: () => import('@/views/Users.vue'),
           meta: {
             breadcrumbTltle: "用户",
           }
         },
         {
           path: "suppliers",
-          component: () => import('./views/Suppliers.vue'),
+          component: () => import('@/views/Suppliers.vue'),
           meta: {
             breadcrumbTltle: "供应商",
           }
