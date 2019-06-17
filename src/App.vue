@@ -10,13 +10,12 @@
       <div class="body am-scrollable-vertical">
         <ol class="am-breadcrumb am-hide-sm-only">
           <li v-for="(title,index) in breadcrumbTltles" :key="index">
-            <a href="#"
+            <a
+              href="#"
               :class="{
                 'am-active':breadcrumbTltles.length==index+1,
               }"
-            >
-              {{title}}
-            </a>
+            >{{title}}</a>
           </li>
         </ol>
         <router-view class="view"/>
@@ -26,50 +25,50 @@
 </template>
 <style lang="less" scoped>
 @import "amazeui/less/variables.less";
-#flex-full{
-  flex-grow:1;
+#flex-full {
+  flex-grow: 1;
 }
-#flex-container{
-  display:flex;
+#flex-container {
+  display: flex;
 }
-.global{
+.global {
   #flex-container;
-  flex-direction:column;
-  height:100%;
-  >.header{
-    padding:15px;
-    height:60px;
+  flex-direction: column;
+  height: 100%;
+  > .header {
+    padding: 15px;
+    height: 60px;
     #flex-container;
     justify-content: space-between;
   }
-  >.body{
+  > .body {
     #flex-full;
     #flex-container;
-    flex-direction:row;
-    >.aside{
-      background-color:#ebebeb;
-      border-right:1px solid #cecece;
-      width:240px;
+    flex-direction: row;
+    > .aside {
+      background-color: #ebebeb;
+      border-right: 1px solid #cecece;
+      width: 240px;
       #flex-container;
     }
-    >.body{
+    > .body {
       #flex-full;
       #flex-container;
-      flex-direction:column;
-      height:100%;
-      >.am-breadcrumb{
-        height:3em;
-        background-color:#ebebeb;
-        margin:0;
+      flex-direction: column;
+      height: 100%;
+      > .am-breadcrumb {
+        height: 3em;
+        background-color: #ebebeb;
+        margin: 0;
       }
-      >.view{
-        padding:6px;
-        @media @small-only{
-          padding:0;
+      > .view {
+        padding: 6px;
+        @media @small-only {
+          padding: 0;
         }
-        display:flex;
-        height:100%;
-        flex-direction:column;
+        display: flex;
+        height: 100%;
+        flex-direction: column;
       }
     }
   }
@@ -78,30 +77,28 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { 
-  Container as elContainer, 
-  Header as elHeader, 
-  Aside as elAside,
-} from "element-ui";
-import Logo from '@/components/logo.vue';
-import User from '@/components/User.vue';
-import MyNav from '@/components/Nav.vue';
 import {
-  Args as NavArgs,
-  Item,Divider,
-} from '@/components/Nav.vue';
+  Container as elContainer,
+  Header as elHeader,
+  Aside as elAside
+} from "element-ui";
+import Logo from "@/components/logo.vue";
+import User from "@/components/User.vue";
+import MyNav from "@/components/Nav.vue";
+import { Args as NavArgs, Item, Divider } from "@/components/Nav.vue";
+import { Route } from "vue-router";
 export default Vue.extend({
-  data(){
+  data() {
     return {
-      navs:<NavArgs>[
-        new Item('控制台','/'),
+      navs: <NavArgs>[
+        new Item("控制台", "/"),
         new Divider(),
-        new Item('用户管理','/users'),
-        new Item('供应商管理','/suppliers'),
-        new Item('科室管理','/offices'),
+        new Item("用户管理", "/users"),
+        new Item("供应商管理", "/suppliers"),
+        new Item("科室管理", "/offices"),
         new Divider(),
-        new Item('设备管理','/drivers'),
-      ],
+        new Item("设备管理", "/drivers")
+      ]
     };
   },
   components: {
@@ -110,12 +107,14 @@ export default Vue.extend({
     elAside,
     Logo,
     User,
-    MyNav,
+    MyNav
   },
-  computed:{
-    breadcrumbTltles(){
-      const ret:Array<any> = this.$route.matched.map((r)=>r.meta.breadcrumbTltle);
-      return ret;
+  computed: {
+    breadcrumbTltles() {
+      let route = this.$route as Route; //迷之问题，放在一行就报错
+      return route.matched
+        .map(r => r.meta.breadcrumbTltle as string | undefined)
+        .filter(str => str !== undefined);
     }
   }
 });
