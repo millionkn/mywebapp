@@ -34,7 +34,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import TableShower from "./TableShower.vue";
+import TableShower from "@/components/TableShower.vue";
 import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
 type Supplier = Record<
   "id" | "name" | "businessLicense" | "medicalDeviceBusinessLicense",

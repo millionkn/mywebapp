@@ -77,7 +77,7 @@
 <script lang="ts">
 import Vue from "vue";
 import moment from "moment";
-import TableShower from "./TableShower.vue";
+import TableShower from "@/components/TableShower.vue";
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
