@@ -36,14 +36,17 @@ export default new Vuex.Store({
             await axios.post('/loginOut');
             commit('setUser', null);
         },
-        async loadData({ commit }, { name }) {
-            if ((this.state.data as any)[name] === unset) {
-                commit('setData', {
-                    name,
-                    array: (await axios.get(`/restAPI/${name}`)).data
+        async loadData({ commit }, { names }: { names: string[] }) {
+            let obj = {} as { [s: string]: object };
+            await Promise.all(
+                names.map(async (name) => {
+                    if ((this.state.data as any)[name] === unset) {
+                        let data = (await axios.get(`/restAPI/${name}`)).data;
+                        obj[name] = data;
+                    }
                 })
-            }
-            return (this.state.data as any)[name];
+            );
+            Object.keys(obj).forEach((name) => commit('setData', { name, array: obj[name] }));
         }
     }
 })

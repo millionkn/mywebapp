@@ -32,11 +32,9 @@ export default Vue.extend({
   async mounted() {
     let loading = Loading.service({ target: "#loading" });
     try {
-      await Promise.all(
-        (this.dataNameArray as string[]).map(name =>
-          this.$store.dispatch("loadData", { name })
-        )
-      );
+      await this.$store.dispatch("loadData", {
+        names: this.dataNameArray || []
+      });
     } catch (e) {
       this.$emit("failed", e);
     } finally {
