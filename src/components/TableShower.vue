@@ -28,13 +28,15 @@ import Vue from "vue";
 import axios from "axios";
 import { Loading } from "element-ui";
 export default Vue.extend({
-  props: {
-    tableDataUrl: String
-  },
+  props: ["dataNameArray"],
   async mounted() {
     let loading = Loading.service({ target: "#loading" });
     try {
-      this.$emit("successed", (await axios.get(this.tableDataUrl)).data);
+      await Promise.all(
+        (this.dataNameArray as string[]).map(name =>
+          this.$store.dispatch("loadData", { name })
+        )
+      );
     } catch (e) {
       this.$emit("failed", e);
     } finally {

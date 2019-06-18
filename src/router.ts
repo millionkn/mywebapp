@@ -33,8 +33,8 @@ export default new Router({
           },
         },
         {
-          path: "users",
-          component: () => import('@/views/Users.vue'),
+          path: "persons",
+          component: () => import('@/views/Persons.vue'),
           meta: {
             breadcrumbTltle: "用户",
           }

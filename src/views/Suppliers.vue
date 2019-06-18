@@ -1,6 +1,6 @@
 <template>
-  <table-shower @successed="(data)=>tableData=data" table-data-url="/restAPI/suppliers">
-    <template #panel-head="scope">
+  <table-shower :dataNameArray="['suppliers']">
+    <template #panel-head>
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="supplierName">
         <span class="am-input-group-btn">
@@ -14,9 +14,9 @@
         <button type="button" class="am-btn am-btn-danger am-round" @click="delectSuppliers">删除</button>
       </div>
     </template>
-    <template #default="scope">
+    <template #default>
       <el-table
-        :data="tableData.filter(supplier=>supplier.name.includes(supplierName))"
+        :data="$store.state.data.suppliers.filter(supplier=>supplier.name.includes(supplierName))"
         @selection-change="(arg)=>selected=arg"
       >
         <el-table-column type="selection" width="55"></el-table-column>

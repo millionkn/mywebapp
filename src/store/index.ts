@@ -2,28 +2,48 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
 Vue.use(Vuex);
-type User={
+const unset = [] as any[];
+type User = {
 
 }
 export default new Vuex.Store({
-    state:{
-        user:<User|null>null,
-    },
-    mutations:{
-        setUser(state,user:User|null){
-            state.user=user;
+    state: {
+        user: <User | null>null,
+        data: {
+            drivers: unset,
+            offices: unset,
+            persons: unset,
+            suppliers: unset,
+            roles: unset,
         }
     },
-    actions:{
-        async login({commit},{username,password}){
-            commit('setUser',(await axios.post("/login",{
+    mutations: {
+        setUser(state, user: User | null) {
+            state.user = user;
+        },
+        setData(state, { name, array }) {
+            (state.data as any)[name] = array;
+        }
+    },
+    actions: {
+        async login({ commit }, { username, password }) {
+            commit('setUser', (await axios.post("/login", {
                 username,
                 password,
             })).data);
         },
-        async logout({commit}){
+        async logout({ commit }) {
             await axios.post('/loginOut');
-            commit('setUser',null);
+            commit('setUser', null);
+        },
+        async loadData({ commit }, { name }) {
+            if ((this.state.data as any)[name] === unset) {
+                commit('setData', {
+                    name,
+                    array: (await axios.get(`/restAPI/${name}`)).data
+                })
+            }
+            return (this.state.data as any)[name];
         }
     }
 })

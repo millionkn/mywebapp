@@ -1,5 +1,5 @@
 <template>
-  <table-shower @successed="(data)=>tableData=data" table-data-url="/restAPI/offices">
+  <table-shower :dataNameArray="['persons','offices']">
     <template #panel-head>
       <span style="flex-grow:1"></span>
       <div class="am-btn-group">
@@ -8,10 +8,12 @@
       </div>
     </template>
     <template #default>
-      <el-table :data="tableData">
+      <el-table :data="$store.state.data.offices">
         <el-table-column label="部门名称" prop="name"></el-table-column>
         <el-table-column label="主任">
-          <template #default="scope">{{(users[scope.row.userId]||{name:"未指定"}).name}}</template>
+          <template
+            #default="scope"
+          >{{($store.state.data.persons[scope.row.personId]||{name:"未指定"}).name}}</template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
@@ -33,12 +35,6 @@ import {
   Option as ElOption
 } from "element-ui";
 import TableShower from "@/components/TableShower.vue";
-import axios from "axios";
-type Office = {
-  id: number;
-  name: string;
-  userId: number;
-};
 export default Vue.extend({
   components: {
     ElTable,
@@ -46,15 +42,6 @@ export default Vue.extend({
     TableShower,
     ElSelect,
     ElOption
-  },
-  data() {
-    return {
-      tableData: [] as Office[],
-      users: [] as { id: number; name: string }[]
-    };
-  },
-  async mounted() {
-    this.users = (await axios.get("restAPI/users")).data;
   }
 });
 </script>

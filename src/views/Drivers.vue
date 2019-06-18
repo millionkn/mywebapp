@@ -1,5 +1,5 @@
 <template>
-  <table-shower table-data-url="/restAPI/drivers" @successed="(arr)=>tableData=arr">
+  <table-shower :dataNameArray="['drivers','offices']">
     <template #panel-head="scope">
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="driverName">
@@ -19,18 +19,20 @@
         <button type="button" class="am-btn am-btn-danger am-round">删除</button>
       </div>
     </template>
-    <template #default="scope">
+    <template #default>
       <el-table
-        :data="tableData.filter(info=>info.name.includes(driverName))"
+        :data="$store.state.data.drivers.filter(info=>info.name.includes(driverName))"
         @selection-change="arr=>selectedRow=arr"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column
           label="科室"
-          :filters="findFilters()"
+          :filters="$store.state.data.offices.map(office => new Object({ value: office.id, text: office.name }))"
           :filter-method="(value, row) => row.officeId === value"
         >
-          <template #default="scope">{{offices[scope.row.officeId].name}}</template>
+          <template
+            #default="scope"
+          >{{($store.state.data.offices[scope.row.officeId]||{name:'未指定'}).name}}</template>
         </el-table-column>
         <el-table-column label="仪器名称" prop="name"></el-table-column>
         <el-table-column label="购买日期">
@@ -49,7 +51,7 @@
         </el-table-column>
         <el-table-column label="提前预警" prop="line"></el-table-column>
         <el-table-column label="详情">
-          <template #default="scope">
+          <template #default>
             <span :class="'text-button'">
               <a href="#">详情</a>
             </span>
@@ -78,12 +80,7 @@
 import Vue from "vue";
 import moment from "moment";
 import TableShower from "@/components/TableShower.vue";
-import axios from "axios";
-import {
-  Table as ElTable,
-  TableColumn as ElTableColumn,
-  Loading
-} from "element-ui";
+import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
 type TimeStamp = number;
 type Turnaround = number;
 type TableRow = {
@@ -94,6 +91,7 @@ type TableRow = {
   inspectionTimes: Turnaround;
   line: Turnaround;
 };
+type Office = { id: number; name: string };
 export default Vue.extend({
   components: {
     ElTable,
@@ -104,9 +102,7 @@ export default Vue.extend({
     return {
       office: undefined as string | undefined,
       driverName: "" as string,
-      tableData: [] as TableRow[],
-      selectedRow: [] as TableRow[],
-      offices: [] as { id: number; name: string }[]
+      selectedRow: [] as TableRow[]
     };
   },
   methods: {
@@ -118,15 +114,7 @@ export default Vue.extend({
     makesureCheck() {
       let data = new Date().valueOf();
       this.selectedRow.forEach(row => (row.lastCheck = data));
-    },
-    findFilters() {
-      return this.offices.map(
-        office => new Object({ value: office.id, text: office.name })
-      );
     }
-  },
-  async mounted() {
-    this.offices = (await axios.get("/restAPI/offices")).data;
   }
 });
 </script>

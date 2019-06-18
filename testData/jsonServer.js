@@ -43,12 +43,12 @@ let offices = ["科室A", "科室B", "检修科"]
   .map((name, id) => new Object({
     name,
     id,
-    userId: Math.floor(4 * Math.random()) - 1,
+    personId: Math.floor(4 * Math.random()) - 1,
   }))
 
 let roles = ["超管", "管理员", "员工"]
   .map((name, id) => new Object({ name, id }))
-let users = new Array(...Array(6))
+let persons = new Array(...Array(6))
   .map((n, id) => new Object({
     id,
     username: `username${id}`,
@@ -61,5 +61,5 @@ module.exports = {
   suppliers,
   offices,
   roles,
-  users,
+  persons,
 }
