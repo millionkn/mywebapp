@@ -42,22 +42,24 @@ import TableShower from "@/components/TableShower.vue";
 import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
 import { Supplier } from "@/types";
 import { loadBeforeMounted } from "@/components/mixin";
+import { Loading } from "element-ui";
+import { deleteData, loadData } from "@/store";
 export default Vue.extend({
   mixins: [loadBeforeMounted("#loading", "suppliers")],
   components: { ElTable, ElTableColumn, TableShower },
   data() {
     return {
-      tableData: [] as Supplier[],
       supplierName: "",
       selected: [] as Supplier[]
     };
   },
   methods: {
-    delectSuppliers() {
-      this.tableData = this.tableData.filter(
-        supplier => !this.selected.includes(supplier)
-      );
-      this.selected.splice(0, this.selected.length);
+    async delectSuppliers() {
+      let loading = Loading.service({});
+      await deleteData("suppliers", this.selected);
+      await loadData(["suppliers"]);
+      this.selected = [];
+      loading.close();
     }
   }
 });

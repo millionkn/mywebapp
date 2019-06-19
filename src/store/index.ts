@@ -76,6 +76,15 @@ let store = new Vuex.Store({
                 await axios.patch(`/restAPI/${type}/${arr[i].id}`, arr[i])
             }
             commit('needRefresh', { type })
+        },
+        async deleteData({ commit }, { type, arr }: {
+            type: KeysType,
+            arr: { id: number }[]
+        }) {
+            for (let i = 0; i < arr.length; i++) {
+                await axios.delete(`/restAPI/${type}/${arr[i].id}`)
+            }
+            commit('needRefresh', { type })
         }
     }
 });
@@ -88,4 +97,7 @@ export async function putData<K extends KeysType>(type: K, arr: typeof outerData
 }
 export async function loadData(types: KeysType[]) {
     await store.dispatch('loadData', { types })
+}
+export async function deleteData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
+    await store.dispatch('deleteData', { type, arr })
 }
