@@ -77,6 +77,15 @@ let store = new Vuex.Store({
             }
             commit('needRefresh', { type })
         },
+        async postData({ commit }, { type, arr }: {
+            type: KeysType,
+            arr: { id: number }[]
+        }) {
+            for (let i = 0; i < arr.length; i++) {
+                await axios.post(`/restAPI/${type}`, arr[i])
+            }
+            commit('needRefresh', { type })
+        },
         async deleteData({ commit }, { type, arr }: {
             type: KeysType,
             arr: { id: number }[]
@@ -100,4 +109,7 @@ export async function loadData(types: KeysType[]) {
 }
 export async function deleteData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
     await store.dispatch('deleteData', { type, arr })
+}
+export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
+    await store.dispatch('postData', { type, arr })
 }

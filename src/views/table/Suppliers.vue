@@ -11,6 +11,11 @@
       </div>
       <span style="flex:1"></span>
       <div class="am-btn-group">
+        <button
+          type="button"
+          class="am-btn am-btn-primary am-round"
+          @click="$router.push(`Suppliers/-1`)"
+        >添加</button>
         <button type="button" class="am-btn am-btn-danger am-round" @click="delectSuppliers">删除</button>
       </div>
     </template>
