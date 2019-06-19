@@ -1,5 +1,5 @@
 <template>
-  <table-shower :dataNameArray="['suppliers']">
+  <table-shower id="loading">
     <template #panel-head>
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="supplierName">
@@ -16,7 +16,7 @@
     </template>
     <template #default>
       <el-table
-        :data="$store.state.data.suppliers.filter(supplier=>supplier.name.includes(supplierName))"
+        :data="$store.getters.suppliers.filter(supplier=>supplier.name.includes(supplierName))"
         @selection-change="(arg)=>selected=arg"
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -40,11 +40,10 @@
 import Vue from "vue";
 import TableShower from "@/components/TableShower.vue";
 import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
-type Supplier = Record<
-  "id" | "name" | "businessLicense" | "medicalDeviceBusinessLicense",
-  string
->;
+import { Supplier } from "@/types";
+import { loadBeforeMounted } from "@/components/mixin";
 export default Vue.extend({
+  mixins: [loadBeforeMounted("#loading", "suppliers")],
   components: { ElTable, ElTableColumn, TableShower },
   data() {
     return {

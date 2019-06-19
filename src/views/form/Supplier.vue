@@ -48,34 +48,23 @@ import Vue from "vue";
 import axios from "axios";
 import { Loading } from "element-ui";
 import FormShower from "@/components/FormShower.vue";
-type Supplier = {
-  id: number;
-  name?: string;
-  businessLicense?: string;
-  medicalDeviceBusinessLicense?: string;
-};
-const unset = { id: NaN } as Supplier;
-
+import { putData } from "@/store";
 export default Vue.extend({
   components: {
     FormShower
   },
   props: {
     object: {
-      type: Object,
-      default: unset
+      type: Object
     }
   },
   methods: {
     async submitHandle() {
       let loading = Loading.service({ target: this.$el as HTMLElement });
-      if (this.object === unset) {
+      if (this.object === undefined) {
         await axios.post(`/restAPI/Suppliers`, this.object);
       } else {
-        await this.$store.dispatch("putData", {
-          type: "Suppliers",
-          arr: [this.object]
-        });
+        await putData("suppliers", [this.object]);
       }
       loading.close();
       this.$router.back();

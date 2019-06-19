@@ -1,28 +1,42 @@
-import Vuex from 'vuex';
+import Vuex, { Store } from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
+import { Driver, Office, Person, Supplier, Role, User } from '@/types/index';
 Vue.use(Vuex);
-const unset = [] as any[];
-type User = {
-
+type Unset = never[]
+const unset = [] as Unset;
+let outerData = {
+    drivers: unset as Driver[] | Unset,
+    offices: unset as Office[] | Unset,
+    persons: unset as Person[] | Unset,
+    suppliers: unset as Supplier[] | Unset,
+    roles: unset as Role[] | Unset,
 }
-export default new Vuex.Store({
+
+export type KeysType = keyof typeof outerData;
+
+let store = new Vuex.Store({
     state: {
         user: <User | null>null,
-        data: {
-            drivers: unset,
-            offices: unset,
-            persons: unset,
-            suppliers: unset,
-            roles: unset,
-        }
+        data: outerData
     },
     mutations: {
         setUser(state, user: User | null) {
             state.user = user;
         },
-        setData(state, { name, array }) {
-            (state.data as any)[name] = array;
+        setData<K extends KeysType>(state: { data: typeof outerData }, { type, array }: {
+            type: K,
+            array: typeof outerData[K]
+        }) {
+            state.data[type] = array;
+        },
+        needRefresh<K extends KeysType>(state: { data: typeof outerData }, { type }: { type: K }) {
+            state.data[type] = unset;
+        },
+    },
+    getters: {
+        suppliers(state) {
+            return state.data.suppliers;
         }
     },
     actions: {
@@ -36,27 +50,42 @@ export default new Vuex.Store({
             await axios.post('/loginOut');
             commit('setUser', null);
         },
-        async loadData({ commit }, { names }: { names: string[] }) {
-            let obj = {} as { [s: string]: object };
-            await Promise.all(
-                names.map(async (name) => {
-                    let data = (await axios.get(`/restAPI/${name}`)).data;
-                    obj[name] = data;
-                })
-            );
-            Object.keys(obj).forEach((name) => commit('setData', { name, array: obj[name] }));
+        async loadData({ commit }: any, { types }: { types: KeysType[] }) {
+            let obj = {} as { [s in KeysType]: typeof outerData[s] };
+            let keys = [] as typeof types;
+            let data = (this as any).state.data as typeof outerData;
+            let promises = types.map(async (type) => {
+                if (data[type] === unset) {
+                    obj[type] = (await axios.get(`/restAPI/${type}`)).data;
+                    keys.push(type);
+                }
+            })
+            await Promise.all(promises);
+            keys.forEach((type) => {
+                commit('setData', { type, array: obj[type] })
+            })
         },
-        async loadSingle({ commit }, { type, id }) {
+        async loadSingle({ commit }, { type, id }: { type: KeysType, id: number }) {
             return (await axios.get(`/restAPI/${type}/${id}`)).data
         },
         async putData({ commit }, { type, arr }: {
-            type: string,
+            type: KeysType,
             arr: { id: number }[]
         }) {
             for (let i = 0; i < arr.length; i++) {
                 await axios.patch(`/restAPI/${type}/${arr[i].id}`, arr[i])
             }
-            await this.dispatch('loadData', { names: [type] })
+            commit('needRefresh', { type })
         }
     }
-})
+});
+export default store;
+export async function loadSingle<K extends KeysType>(type: K, id: number): Promise<typeof outerData[K]> {
+    return await store.dispatch('loadSingle', { type, id })
+}
+export async function putData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
+    await store.dispatch('putData', { type, arr })
+}
+export async function loadData(types: KeysType[]) {
+    await store.dispatch('loadData', { types })
+}

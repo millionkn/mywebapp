@@ -3,7 +3,7 @@
     <div class="am-panel-hd">
       <slot name="panel-head"></slot>
     </div>
-    <div class="am-panel-bd" id="loading">
+    <div class="am-panel-bd">
       <slot></slot>
     </div>
   </div>
@@ -25,22 +25,6 @@
 </style>
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
-import { Loading } from "element-ui";
-export default Vue.extend({
-  props: ["dataNameArray"],
-  async mounted() {
-    let loading = Loading.service({ target: "#loading" });
-    try {
-      await this.$store.dispatch("loadData", {
-        names: this.dataNameArray || []
-      });
-    } catch (e) {
-      this.$emit("failed", e);
-    } finally {
-      loading.close();
-    }
-  }
-});
+export default Vue.extend({});
 </script>
 

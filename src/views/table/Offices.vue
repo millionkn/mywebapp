@@ -1,5 +1,5 @@
 <template>
-  <table-shower :dataNameArray="['persons','offices']">
+  <table-shower id="loading">
     <template #panel-head>
       <span style="flex-grow:1"></span>
       <div class="am-btn-group">
@@ -35,7 +35,9 @@ import {
   Option as ElOption
 } from "element-ui";
 import TableShower from "@/components/TableShower.vue";
+import { loadBeforeMounted } from "@/components/mixin";
 export default Vue.extend({
+  mixins: [loadBeforeMounted("#loading", "persons", "offices")],
   components: {
     ElTable,
     ElTableColumn,

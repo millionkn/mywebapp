@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router, { RouteConfig } from 'vue-router'
 import Empty from "@/components/Empty.vue";
-import store from './store';
+import { KeysType, loadSingle } from './store';
 Vue.use(Router);
-function pack(type: keyof typeof store.state.data, table: RouteConfig['component'], form: RouteConfig['component']) {
+function pack(type: KeysType, table: RouteConfig['component'], form: RouteConfig['component']) {
   let editing: any;
   return [
     {
@@ -18,7 +18,7 @@ function pack(type: keyof typeof store.state.data, table: RouteConfig['component
       component: form,
       async beforeEnter(to, from, next) {
         try {
-          editing = await store.dispatch('loadSingle', { type, id: to.params.id });
+          editing = await loadSingle(type, Number.parseInt(to.params.id));
         } catch{
           editing = undefined
         }

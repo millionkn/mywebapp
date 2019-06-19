@@ -1,5 +1,5 @@
 <template>
-  <table-shower :dataNameArray="['drivers','offices']">
+  <table-shower id="loading">
     <template #panel-head="scope">
       <div class="am-input-group">
         <input type="text" class="am-form-field" v-model="driverName">
@@ -82,18 +82,10 @@ import Vue from "vue";
 import moment from "moment";
 import TableShower from "@/components/TableShower.vue";
 import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
-type TimeStamp = number;
-type Turnaround = number;
-type TableRow = {
-  office: string;
-  name: string;
-  buyDate: TimeStamp;
-  lastCheck: TimeStamp;
-  inspectionTimes: Turnaround;
-  line: Turnaround;
-};
-type Office = { id: number; name: string };
+import { Driver } from "@/types/index";
+import { loadBeforeMounted } from "@/components/mixin";
 export default Vue.extend({
+  mixins: [loadBeforeMounted("#loading", "drivers", "offices")],
   components: {
     ElTable,
     ElTableColumn,
@@ -103,12 +95,12 @@ export default Vue.extend({
     return {
       office: undefined as string | undefined,
       driverName: "" as string,
-      selectedRow: [] as TableRow[]
+      selectedRow: [] as Driver[]
     };
   },
   methods: {
-    dateOf: (row: TableRow) => moment(row.buyDate).format("YYYY-M-D"),
-    daysAfterLastCheck: (row: TableRow) =>
+    dateOf: (row: Driver) => moment(row.buyDate).format("YYYY-M-D"),
+    daysAfterLastCheck: (row: Driver) =>
       Math.floor(
         moment.duration(new Date().valueOf() - row.lastCheck).asDays()
       ),

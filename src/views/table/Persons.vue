@@ -1,5 +1,5 @@
 <template>
-  <table-shower :dataNameArray="['persons','offices','roles']">
+  <table-shower id="loading">
     <template #panel-head="scope">
       <span style="flex-grow:1"></span>
       <button type="button" class="am-btn am-btn-primary am-round" @click="submitChange">提交修改</button>
@@ -52,19 +52,10 @@ import {
   Select as ElSelect,
   Option as ElOption
 } from "element-ui";
-type Person = {
-  id: number;
-  username: string;
-  name: string;
-  officeId: number;
-  roleId: number;
-};
-type Office = {
-  id: number;
-  name: string;
-};
-type Role = Office;
+import { Person } from "@/types/index";
+import { loadBeforeMounted } from "@/components/mixin";
 export default Vue.extend({
+  mixins: [loadBeforeMounted("#loading", "persons", "offices", "roles")],
   data() {
     return {
       changed: new Set() as Set<Person>
