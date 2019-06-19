@@ -25,7 +25,11 @@
         <el-table-column label="医疗器械经营许可证编号" prop="medicalDeviceBusinessLicense"></el-table-column>
         <el-table-column label="编辑">
           <template #default="scope">
-            <button type="button" class="am-btn am-btn-primary am-round">编辑</button>
+            <button
+              type="button"
+              class="am-btn am-btn-primary am-round"
+              @click="$router.push(`Suppliers/${scope.row.id}`)"
+            >编辑</button>
           </template>
         </el-table-column>
       </el-table>

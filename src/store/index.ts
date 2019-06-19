@@ -40,10 +40,8 @@ export default new Vuex.Store({
             let obj = {} as { [s: string]: object };
             await Promise.all(
                 names.map(async (name) => {
-                    if ((this.state.data as any)[name] === unset) {
-                        let data = (await axios.get(`/restAPI/${name}`)).data;
-                        obj[name] = data;
-                    }
+                    let data = (await axios.get(`/restAPI/${name}`)).data;
+                    obj[name] = data;
                 })
             );
             Object.keys(obj).forEach((name) => commit('setData', { name, array: obj[name] }));
