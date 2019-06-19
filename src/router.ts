@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router, { RouteConfig } from 'vue-router'
 import Empty from "@/components/Empty.vue";
 import store from './store';
-import axios from 'axios';
 Vue.use(Router);
 function pack(type: keyof typeof store.state.data, table: RouteConfig['component'], form: RouteConfig['component']) {
   let editing: any;
@@ -18,7 +17,11 @@ function pack(type: keyof typeof store.state.data, table: RouteConfig['component
       path: ":id",
       component: form,
       async beforeEnter(to, from, next) {
-        editing = await store.dispatch('loadSingle', { type, id: to.params.id });
+        try {
+          editing = await store.dispatch('loadSingle', { type, id: to.params.id });
+        } catch{
+          editing = undefined
+        }
         next();
       },
       props(route) {
