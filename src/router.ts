@@ -27,28 +27,28 @@ export default new Router({
         },
         {
           path: 'drivers',
-          component: () => import('./views/Drivers.vue'),
+          component: () => import('./views/table/Drivers.vue'),
           meta: {
             breadcrumbTltle: "设备管理",
           },
         },
         {
           path: "persons",
-          component: () => import('@/views/Persons.vue'),
+          component: () => import('@/views/table/Persons.vue'),
           meta: {
             breadcrumbTltle: "用户",
           }
         },
         {
           path: "suppliers",
-          component: () => import('@/views/Suppliers.vue'),
+          component: () => import('@/views/table/Suppliers.vue'),
           meta: {
             breadcrumbTltle: "供应商",
           }
         },
         {
           path: "offices",
-          component: () => import('@/views/Offices.vue'),
+          component: () => import('@/views/table/Offices.vue'),
           meta: {
             breadcrumbTltle: "科室",
           }
