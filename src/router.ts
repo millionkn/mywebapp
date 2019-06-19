@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router, { RouteConfig } from 'vue-router'
 import Empty from "@/components/Empty.vue";
+import store from './store';
+import axios from 'axios';
 Vue.use(Router);
-function pack(table: RouteConfig['component'], form: RouteConfig['component']) {
+function pack(type: keyof typeof store.state.data, table: RouteConfig['component'], form: RouteConfig['component']) {
+  let editing: any;
   return [
     {
       path: "",
@@ -12,24 +15,18 @@ function pack(table: RouteConfig['component'], form: RouteConfig['component']) {
       },
     },
     {
-      path: "-1",
-      component: form,
-      props: (router) => ({
-        id: -1,
-      }),
-      meta: {
-        breadcrumbTltle: "添加",
-      },
-    },
-    {
       path: ":id",
       component: form,
-      props: (router) => ({
-        id: Number.parseInt(router.params.id),
-      }),
-      meta: {
-        breadcrumbTltle: "编辑",
+      async beforeEnter(to, from, next) {
+        editing = await store.dispatch('loadSingle', { type, id: to.params.id });
+        next();
       },
+      props(route) {
+        return {
+          object: editing
+        }
+      },
+      meta: {},
     },
   ] as RouteConfig[]
 }
@@ -75,7 +72,7 @@ export default new Router({
           meta: {
             breadcrumbTltle: "供应商",
           },
-          children: pack(() => import("@/views/table/Suppliers.vue"), () => import("@/views/form/Supplier.vue"))
+          children: pack("suppliers", () => import("@/views/table/Suppliers.vue"), () => import("@/views/form/Supplier.vue"))
         },
         {
           path: "Offices",

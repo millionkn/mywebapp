@@ -45,6 +45,18 @@ export default new Vuex.Store({
                 })
             );
             Object.keys(obj).forEach((name) => commit('setData', { name, array: obj[name] }));
+        },
+        async loadSingle({ commit }, { type, id }) {
+            return (await axios.get(`/restAPI/${type}/${id}`)).data
+        },
+        async putData({ commit }, { type, arr }: {
+            type: string,
+            arr: { id: number }[]
+        }) {
+            for (let i = 0; i < arr.length; i++) {
+                await axios.patch(`/restAPI/${type}/${arr[i].id}`, arr[i])
+            }
+            await this.dispatch('loadData', { names: [type] })
         }
     }
 })

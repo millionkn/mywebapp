@@ -4,11 +4,11 @@
       <span>编辑供应商</span>
     </template>
     <template #default>
-      <form @submit="submitHandle">
+      <form @submit.prevent="submitHandle">
         <div class="am-input-group am-input-group-secondary">
           <span>名称</span>
           <input
-            v-model="obj.name"
+            v-model="object.name"
             name="name"
             type="text"
             class="am-form-field"
@@ -19,7 +19,7 @@
         <div class="am-input-group am-input-group-secondary">
           <span>营业执照编号</span>
           <input
-            v-model="obj.businessLicense"
+            v-model="object.businessLicense"
             name="name"
             type="text"
             class="am-form-field"
@@ -30,7 +30,7 @@
         <div class="am-input-group am-input-group-secondary">
           <span>医疗器械经营许可证编号</span>
           <input
-            v-model="obj.medicalDeviceBusinessLicense"
+            v-model="object.medicalDeviceBusinessLicense"
             name="name"
             type="text"
             class="am-form-field"
@@ -49,42 +49,33 @@ import axios from "axios";
 import { Loading } from "element-ui";
 import FormShower from "@/components/FormShower.vue";
 type Supplier = {
+  id: number;
   name?: string;
   businessLicense?: string;
   medicalDeviceBusinessLicense?: string;
 };
+const unset = { id: NaN } as Supplier;
 
 export default Vue.extend({
   components: {
     FormShower
   },
-  data() {
-    return {
-      obj: {
-        name: undefined,
-        businessLicense: undefined,
-        medicalDeviceBusinessLicense: undefined
-      }
-    };
-  },
   props: {
-    id: Number
-  },
-  async mounted() {
-    if (this.id < 0) {
-      return;
+    object: {
+      type: Object,
+      default: unset
     }
-    let loading = Loading.service({ target: this.$el as HTMLElement });
-    this.obj = (await axios.get(`/restAPI/Suppliers/${this.id}`)).data;
-    loading.close();
   },
   methods: {
     async submitHandle() {
       let loading = Loading.service({ target: this.$el as HTMLElement });
-      if (this.id > 0) {
-        await axios.patch(`/restAPI/Suppliers/${this.id}`, this.obj);
+      if (this.object === unset) {
+        await axios.post(`/restAPI/Suppliers`, this.object);
       } else {
-        await axios.post(`/restAPI/Suppliers`, this.obj);
+        await this.$store.dispatch("putData", {
+          type: "Suppliers",
+          arr: [this.object]
+        });
       }
       loading.close();
       this.$router.back();
