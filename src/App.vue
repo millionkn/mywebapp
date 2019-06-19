@@ -93,9 +93,9 @@ export default Vue.extend({
       navs: <NavArgs>[
         new Item("控制台&设备管理", "/"),
         new Divider(),
-        new Item("人员管理", "persons"),
-        new Item("供应商管理", "/suppliers"),
-        new Item("科室管理", "/offices")
+        new Item("人员管理", "Persons"),
+        new Item("供应商管理", "/Suppliers"),
+        new Item("科室管理", "/Offices")
       ]
     };
   },

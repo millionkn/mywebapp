@@ -3,11 +3,15 @@
     <span v-if="user">
       <span>[{{user.role}}]</span>
       <span>{{user.name}}</span>
-      <span @click="logout"><a href="#">退出</a></span>
+      <span @click="logout">
+        <a href="#">退出</a>
+      </span>
     </span>
     <span v-else>
       请
-      <router-link to="/login"><a href="#">登录</a></router-link>
+      <router-link to="/Login">
+        <a href="#">登录</a>
+      </router-link>
     </span>
   </div>
 </template>

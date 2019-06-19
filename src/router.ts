@@ -8,8 +8,8 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/login",
-      component: () => import('./views/Login.vue'),
+      path: "/Login",
+      component: () => import('@/views/Login.vue'),
       meta: {
         breadcrumbTltle: "登录",
       },
@@ -23,31 +23,31 @@ export default new Router({
       children: [
         {
           path: "/",
-          redirect: "/drivers",
+          redirect: "/Drivers",
         },
         {
-          path: 'drivers',
-          component: () => import('./views/table/Drivers.vue'),
+          path: 'Drivers',
+          component: () => import('@/views/table/Drivers.vue'),
           meta: {
             breadcrumbTltle: "设备管理",
           },
         },
         {
-          path: "persons",
+          path: "Persons",
           component: () => import('@/views/table/Persons.vue'),
           meta: {
             breadcrumbTltle: "用户",
           }
         },
         {
-          path: "suppliers",
+          path: "Suppliers",
           component: () => import('@/views/table/Suppliers.vue'),
           meta: {
             breadcrumbTltle: "供应商",
           }
         },
         {
-          path: "offices",
+          path: "Offices",
           component: () => import('@/views/table/Offices.vue'),
           meta: {
             breadcrumbTltle: "科室",
