@@ -18,7 +18,7 @@
         <div class="am-input-group am-input-group-secondary">
           <span>主任</span>
           <div>
-            <el-select v-model="object.personId">
+            <el-select v-model="object.personId" filterable>
               <el-option label="未指定" :value="-1"></el-option>
               <el-option
                 v-for="item in $store.getters.persons"
