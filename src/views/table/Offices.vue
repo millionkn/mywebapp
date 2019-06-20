@@ -4,11 +4,12 @@
       <span style="flex-grow:1"></span>
       <div class="am-btn-group">
         <button type="button" class="am-btn am-btn-primary am-round">添加</button>
-        <button type="button" class="am-btn am-btn-danger am-round">删除</button>
+        <button type="button" class="am-btn am-btn-danger am-round" @click="deleteHandle">删除</button>
       </div>
     </template>
     <template #default>
-      <el-table :data="$store.state.data.offices">
+      <el-table :data="$store.state.data.offices" @selection-change="(arg)=>selected=arg">
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="部门名称" prop="name"></el-table-column>
         <el-table-column label="主任">
           <template
@@ -35,15 +36,23 @@ import {
   Option as ElOption
 } from "element-ui";
 import TableShower from "@/components/TableShower.vue";
-import { loadBeforeMounted } from "@/components/mixin";
+import { loadBeforeMounted, haveDeleteHandle } from "@/components/mixin";
 export default Vue.extend({
-  mixins: [loadBeforeMounted("#loading", "persons", "offices")],
+  mixins: [
+    loadBeforeMounted("#loading", "persons", "offices"),
+    haveDeleteHandle("offices", "deleteHandle", "selected", "#loading")
+  ],
   components: {
     ElTable,
     ElTableColumn,
     TableShower,
     ElSelect,
     ElOption
+  },
+  data() {
+    return {
+      selected: []
+    };
   }
 });
 </script>
