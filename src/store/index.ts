@@ -1,27 +1,27 @@
 import Vuex, { Store } from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
-import { Driver, Office, Person, Supplier, Role, User } from '@/types/index';
+import * as type from '@/types/index';
 Vue.use(Vuex);
 type Unset = never[]
 const unset = [] as Unset;
 let outerData = {
-    drivers: unset as Driver[] | Unset,
-    offices: unset as Office[] | Unset,
-    persons: unset as Person[] | Unset,
-    suppliers: unset as Supplier[] | Unset,
-    roles: unset as Role[] | Unset,
+    drivers: unset as type.Driver[] | Unset,
+    offices: unset as type.Office[] | Unset,
+    persons: unset as type.Person[] | Unset,
+    suppliers: unset as type.Supplier[] | Unset,
+    roles: unset as type.Role[] | Unset,
 }
 export type OuterData = typeof outerData;
 export type KeysType = keyof OuterData;
 
 let store = new Vuex.Store({
     state: {
-        user: <User | null>null,
+        user: <type.User | null>null,
         data: outerData
     },
     mutations: {
-        setUser(state, user: User | null) {
+        setUser(state, user: type.User | null) {
             state.user = user;
         },
         setData<K extends KeysType>(state: { data: typeof outerData }, { type, array }: {
