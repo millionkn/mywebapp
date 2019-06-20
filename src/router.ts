@@ -4,7 +4,6 @@ import Empty from "@/components/Empty.vue";
 import { KeysType, loadSingle } from './store';
 Vue.use(Router);
 function pack(type: KeysType, table: RouteConfig['component'], form: RouteConfig['component']) {
-  let editing: any;
   return [
     {
       path: "",
@@ -16,20 +15,9 @@ function pack(type: KeysType, table: RouteConfig['component'], form: RouteConfig
     {
       path: ":id",
       component: form,
-      async beforeEnter(to, from, next) {
-        try {
-          editing = await loadSingle(type, Number.parseInt(to.params.id));
-        } catch{
-          editing = undefined
-        }
-        next();
+      meta: {
+        breadcrumbTltle: "编辑",
       },
-      props(route) {
-        return {
-          object: editing
-        }
-      },
-      meta: {},
     },
   ] as RouteConfig[]
 }

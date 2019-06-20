@@ -6,6 +6,7 @@ import {
   putData,
   OuterData,
   deleteData,
+  loadSingle,
 } from '@/store';
 import { ComponentOptions } from 'vue/types/options';
 import Vue from 'vue';
@@ -18,18 +19,27 @@ export function loadBeforeMounted(target: string, ...args: KeysType[]): Componen
     },
   }
 }
-export function haveSubmitHandle(type: KeysType, propName: string, handleName: string): ComponentOptions<Vue> {
+export function loadingSingleByRouter(type: KeysType, dataName: string, target?: string): ComponentOptions<Vue> {
   return {
-    props: {
-      [propName]: {
-        type: Object,
-        default: {}
+    data() {
+      return {
+        [dataName]: {}
       }
     },
+    async mounted() {
+      let loading = Loading.service({ target });
+      (this as any)[dataName] = await loadSingle(type, Number.parseInt((this as any).$router.currentRoute.params.id))
+      loading.close();
+
+    },
+  }
+}
+export function haveSubmitHandle(type: KeysType, dataName: string, handleName: string): ComponentOptions<Vue> {
+  return {
     methods: {
       async [handleName]() {
         let loading = Loading.service({ target: this.$el as HTMLElement });
-        let object = (this as any)[propName]
+        let object = (this as any)[dataName]
         if (object.id === undefined) {
           await postData(type, [object]);
         } else {

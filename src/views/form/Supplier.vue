@@ -47,9 +47,12 @@
 import Vue from "vue";
 import axios from "axios";
 import FormShower from "@/components/FormShower.vue";
-import { haveSubmitHandle } from "@/components/mixin";
+import { haveSubmitHandle, loadingSingleByRouter } from "@/components/mixin";
 export default Vue.extend({
-  mixins: [haveSubmitHandle("suppliers", "object", "submitHandle")],
+  mixins: [
+    loadingSingleByRouter("suppliers", "object", "#loading"),
+    haveSubmitHandle("suppliers", "object", "submitHandle")
+  ],
   components: {
     FormShower
   }
