@@ -33,7 +33,7 @@
         >
           <template
             #default="scope"
-          >{{($store.state.data.offices[scope.row.officeId]||{name:'未指定'}).name}}</template>
+          >{{($store.state.data.offices.find(office=>office.id===scope.row.officeId)||{name:"未指定"}).name}}</template>
         </el-table-column>
         <el-table-column label="仪器名称" prop="name"></el-table-column>
         <el-table-column label="购买日期">

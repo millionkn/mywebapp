@@ -14,7 +14,7 @@
         <el-table-column label="主任">
           <template
             #default="scope"
-          >{{($store.state.data.persons[scope.row.personId]||{name:"未指定"}).name}}</template>
+          >{{($store.getters.persons.find(person=>person.id===scope.row.personId)||{name:"未指定"}).name}}</template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
