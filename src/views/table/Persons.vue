@@ -6,7 +6,7 @@
     </template>
     <template #default="scope">
       <el-table
-        ref="table"
+        id="loading"
         :data="$store.getters.persons"
         :row-style="(arg)=>changed.has(arg.row)?{background:'rgb(255, 226, 173)'}:{}"
       >
@@ -54,6 +54,8 @@ import {
 } from "element-ui";
 import { Person } from "@/types/index";
 import { loadBeforeMounted } from "@/components/mixin";
+import { putData, loadData } from "@/store";
+import { Loading } from "element-ui";
 export default Vue.extend({
   mixins: [loadBeforeMounted("#loading", "persons", "offices", "roles")],
   data() {
@@ -62,9 +64,12 @@ export default Vue.extend({
     };
   },
   methods: {
-    submitChange() {
-      this.changed.clear();
-      this.$forceUpdate();
+    async submitChange() {
+      let loading = Loading.service({ target: "#loading" });
+      await putData("persons", new Array(...this.changed));
+      await loadData(["persons"]);
+      this.changed = new Set() as Set<Person>;
+      loading.close();
     }
   },
   components: {
