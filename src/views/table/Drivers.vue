@@ -22,18 +22,18 @@
     </template>
     <template #default>
       <el-table
-        :data="$store.state.data.drivers.filter(info=>info.name.includes(driverName))"
+        :data="$store.getters.drivers.filter(info=>info.name.includes(driverName))"
         @selection-change="arr=>selectedRow=arr"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column
           label="科室"
-          :filters="$store.state.data.offices.map(office => new Object({ value: office.id, text: office.name }))"
+          :filters="$store.getters.offices.map(office => new Object({ value: office.id, text: office.name }))"
           :filter-method="(value, row) => row.officeId === value"
         >
           <template
             #default="scope"
-          >{{($store.state.data.offices.find(office=>office.id===scope.row.officeId)||{name:"未指定"}).name}}</template>
+          >{{($store.getters.offices.find(office=>office.id===scope.row.officeId)||{name:"未指定"}).name}}</template>
         </el-table-column>
         <el-table-column label="仪器名称" prop="name"></el-table-column>
         <el-table-column label="购买日期">

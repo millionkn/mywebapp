@@ -7,7 +7,7 @@
     <template #default="scope">
       <el-table
         ref="table"
-        :data="$store.state.data.persons"
+        :data="$store.getters.persons"
         :row-style="(arg)=>changed.has(arg.row)?{background:'rgb(255, 226, 173)'}:{}"
       >
         <el-table-column label="用户名" prop="username"></el-table-column>
@@ -17,7 +17,7 @@
             <el-select v-model="scope.row.officeId" @change="changed.add(scope.row)">
               <el-option label="未指定" :value="-1"></el-option>
               <el-option
-                v-for="item in $store.state.data.offices"
+                v-for="item in $store.getters.offices"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -30,7 +30,7 @@
             <el-select v-model="scope.row.roleId" @change="changed.add(scope.row)">
               <el-option label="未审核" :value="-1"></el-option>
               <el-option
-                v-for="item in $store.state.data.roles"
+                v-for="item in $store.getters.roles"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"

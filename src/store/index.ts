@@ -37,6 +37,18 @@ let store = new Vuex.Store({
     getters: {
         suppliers(state) {
             return state.data.suppliers;
+        },
+        persons(state) {
+            return state.data.persons;
+        },
+        roles(state) {
+            return state.data.roles;
+        },
+        drivers(state) {
+            return state.data.drivers;
+        },
+        offices(state) {
+            return state.data.offices;
         }
     },
     actions: {

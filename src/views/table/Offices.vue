@@ -8,7 +8,7 @@
       </div>
     </template>
     <template #default>
-      <el-table :data="$store.state.data.offices" @selection-change="(arg)=>selected=arg">
+      <el-table :data="$store.getters.offices" @selection-change="(arg)=>selected=arg">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="部门名称" prop="name"></el-table-column>
         <el-table-column label="主任">
