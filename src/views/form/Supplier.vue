@@ -46,31 +46,12 @@
 <script lang="ts">
 import Vue from "vue";
 import axios from "axios";
-import { Loading } from "element-ui";
 import FormShower from "@/components/FormShower.vue";
-import { putData, postData, loadData } from "@/store";
+import { haveSubmitHandle } from "@/components/mixin";
 export default Vue.extend({
+  mixins: [haveSubmitHandle("suppliers", "object", "submitHandle")],
   components: {
     FormShower
-  },
-  props: {
-    object: {
-      type: Object,
-      default: {}
-    }
-  },
-  methods: {
-    async submitHandle() {
-      let loading = Loading.service({ target: this.$el as HTMLElement });
-      if (this.object.id === undefined) {
-        await postData("suppliers", [this.object]);
-      } else {
-        await putData("suppliers", [this.object]);
-      }
-      await loadData(["suppliers"]);
-      loading.close();
-      this.$router.back();
-    }
   }
 });
 </script>
