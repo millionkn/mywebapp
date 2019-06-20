@@ -28,7 +28,12 @@ export function loadingSingleByRouter(type: KeysType, dataName: string, target?:
     },
     async mounted() {
       let loading = Loading.service({ target });
-      (this as any)[dataName] = await loadSingle(type, Number.parseInt((this as any).$router.currentRoute.params.id))
+      try {
+        (this as any)[dataName] = await loadSingle(type, Number.parseInt((this as any).$router.currentRoute.params.id))
+      } catch (e) {
+        (this as any)[dataName] = {};
+      }
+
       loading.close();
 
     },
