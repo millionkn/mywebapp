@@ -67,10 +67,11 @@ export default new Router({
         },
         {
           path: "Offices",
-          component: () => import('@/views/table/Offices.vue'),
+          component: Empty,
           meta: {
             breadcrumbTltle: "科室",
-          }
+          },
+          children: pack('offices', () => import('@/views/table/Offices.vue'), () => import('@/views/form/Office.vue'))
         },
       ],
     },

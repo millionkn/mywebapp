@@ -3,7 +3,11 @@
     <template #panel-head>
       <span style="flex-grow:1"></span>
       <div class="am-btn-group">
-        <button type="button" class="am-btn am-btn-primary am-round">添加</button>
+        <button
+          type="button"
+          class="am-btn am-btn-primary am-round"
+          @click="$router.push(`Offices/-1`)"
+        >添加</button>
         <button type="button" class="am-btn am-btn-danger am-round" @click="deleteHandle">删除</button>
       </div>
     </template>
@@ -19,7 +23,11 @@
         <el-table-column label="操作">
           <template #default="scope">
             <div class="am-btn-group">
-              <button type="button" class="am-btn am-btn-primary am-round">编辑</button>
+              <button
+                type="button"
+                class="am-btn am-btn-primary am-round"
+                @click="$router.push(`Offices/${scope.row.id}`)"
+              >编辑</button>
             </div>
           </template>
         </el-table-column>
