@@ -10,8 +10,8 @@ export type Person = {
   id: number;
   username: string;
   name: string;
-  officeId: number;
-  roleId: number;
+  officeId: Office['id'];
+  roleId: Role['id'];
 };
 export type Office = {
   id: number,
