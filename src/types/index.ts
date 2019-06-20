@@ -29,7 +29,13 @@ export type Driver = {
   officeId: Office['id'];
   name: string;
   buyDate: TimeStamp;
-  lastCheck: TimeStamp;
   inspectionTimes: Turnaround;
   line: Turnaround;
 };
+export type Log = {
+  id: number;
+  personId: Person['id'];
+  date: TimeStamp;
+  driverId: Driver['id'];
+  extra: string;
+}

@@ -11,6 +11,7 @@ let outerData = {
     persons: unset as type.Person[] | Unset,
     suppliers: unset as type.Supplier[] | Unset,
     roles: unset as type.Role[] | Unset,
+    logs: unset as type.Log[] | Unset,
 }
 export type OuterData = typeof outerData;
 export type KeysType = keyof OuterData;
@@ -49,6 +50,9 @@ let store = new Vuex.Store({
         },
         offices(state) {
             return state.data.offices;
+        },
+        logs(state) {
+            return state.data.logs;
         }
     },
     actions: {
@@ -124,4 +128,7 @@ export async function deleteData<K extends KeysType>(type: K, arr: typeof outerD
 }
 export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
     await store.dispatch('postData', { type, arr })
+}
+export async function checkDrivers(driverIdArray: number[]) {
+    await new Promise((res) => setTimeout(res, 3000))
 }

@@ -91,7 +91,7 @@ export default Vue.extend({
   data() {
     return {
       navs: <NavArgs>[
-        new Item("控制台&设备管理", "/"),
+        new Item("控制台", "/"),
         new Divider(),
         new Item("人员管理", "Persons"),
         new Item("供应商管理", "/Suppliers"),

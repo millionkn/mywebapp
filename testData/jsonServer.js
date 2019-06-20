@@ -1,12 +1,17 @@
 const moment = require('moment');
 let dataValue = new Date().valueOf();
+moment(dataValue).add({
+  day: -4,
+}).valueOf();
+function rand(num) {
+  return Math.floor(num * Math.random());
+}
 let drivers = [
   {
     id: 1,
     officeId: 0,
     name: "仪器A1",
     buyDate: dataValue,
-    lastCheck: dataValue,
     inspectionTimes: 7,
     line: 3,
   },
@@ -15,20 +20,14 @@ let drivers = [
     officeId: 0,
     name: "仪器A2",
     buyDate: dataValue,
-    lastCheck: moment(dataValue).add({
-      day: -4,
-    }).valueOf(),
     inspectionTimes: 7,
-    line: 3,
+    line: 7,
   },
   {
     id: 3,
     officeId: 1,
     name: "仪器B1",
     buyDate: dataValue,
-    lastCheck: moment(dataValue).add({
-      day: -6,
-    }).valueOf(),
     inspectionTimes: 7,
     line: 5,
   },
@@ -55,11 +54,21 @@ let persons = new Array(...Array(6))
     name: `真实姓名${id}`,
     officeId: id >= offices.length ? -1 : id,
     roleId: id >= roles.length ? -1 : id,
-  }))
+  }));
+let logs = new Array(...Array(8)).map((n, id) => ({
+  id,
+  personId: rand(persons.length),
+  driverId: rand(drivers.length),
+  date: moment(dataValue).add({
+    day: 0 - rand(8),
+  }).valueOf(),
+  extra: `一段随机数:${Math.random() * 46}`
+}));
 module.exports = {
   drivers,
   suppliers,
   offices,
   roles,
   persons,
+  logs,
 }

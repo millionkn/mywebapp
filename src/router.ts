@@ -40,14 +40,10 @@ export default new Router({
       },
       children: [
         {
-          path: "/",
-          redirect: "/Drivers",
-        },
-        {
-          path: 'Drivers',
-          component: () => import('@/views/table/Drivers.vue'),
+          path: '',
+          component: () => import('@/views/Console.vue'),
           meta: {
-            breadcrumbTltle: "设备管理",
+            breadcrumbTltle: "控制台",
           },
         },
         {
