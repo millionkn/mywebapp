@@ -46,26 +46,20 @@ import Vue from "vue";
 import TableShower from "@/components/TableShower.vue";
 import { Table as ElTable, TableColumn as ElTableColumn } from "element-ui";
 import { Supplier } from "@/types";
-import { loadBeforeMounted } from "@/components/mixin";
+import { loadBeforeMounted, haveDeleteHandle } from "@/components/mixin";
 import { Loading } from "element-ui";
 import { deleteData, loadData } from "@/store";
 export default Vue.extend({
-  mixins: [loadBeforeMounted("#loading", "suppliers")],
+  mixins: [
+    loadBeforeMounted("#loading", "suppliers"),
+    haveDeleteHandle("suppliers", "delectSuppliers", "selected", "#loading")
+  ],
   components: { ElTable, ElTableColumn, TableShower },
   data() {
     return {
       supplierName: "",
       selected: [] as Supplier[]
     };
-  },
-  methods: {
-    async delectSuppliers() {
-      let loading = Loading.service({});
-      await deleteData("suppliers", this.selected);
-      await loadData(["suppliers"]);
-      this.selected = [];
-      loading.close();
-    }
   }
 });
 </script>

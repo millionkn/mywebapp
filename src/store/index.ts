@@ -12,8 +12,8 @@ let outerData = {
     suppliers: unset as Supplier[] | Unset,
     roles: unset as Role[] | Unset,
 }
-
-export type KeysType = keyof typeof outerData;
+export type OuterData = typeof outerData;
+export type KeysType = keyof OuterData;
 
 let store = new Vuex.Store({
     state: {

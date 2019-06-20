@@ -1,5 +1,12 @@
-import { Loading as ElLoading, Loading } from 'element-ui';
-import { KeysType, loadData, postData, putData } from '@/store';
+import { Loading } from 'element-ui';
+import {
+  KeysType,
+  loadData,
+  postData,
+  putData,
+  OuterData,
+  deleteData,
+} from '@/store';
 import { ComponentOptions } from 'vue/types/options';
 import Vue from 'vue';
 export function loadBeforeMounted(target: string, ...args: KeysType[]): ComponentOptions<Vue> {
@@ -31,6 +38,22 @@ export function haveSubmitHandle(type: KeysType, propName: string, handleName: s
         await loadData([type]);
         loading.close();
         this.$router.back();
+      }
+    }
+  }
+};
+export function haveDeleteHandle<T extends KeysType>(type: T, handleName: string, targetArrayName: string, targetElement?: string) {
+  return {
+    methods: {
+      async [handleName]() {
+        let loading = Loading.service({
+          target: targetElement
+        });
+        let array = (this as any)[targetArrayName]
+        await deleteData(type, array);
+        await loadData([type]);
+        array.splice(0, array.length);
+        loading.close();
       }
     }
   }
