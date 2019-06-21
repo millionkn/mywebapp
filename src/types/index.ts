@@ -31,6 +31,7 @@ export type Driver = {
   buyDate: TimeStamp;
   inspectionTimes: Turnaround;
   line: Turnaround;
+  extra: string;
 };
 export type Log = {
   id: number;

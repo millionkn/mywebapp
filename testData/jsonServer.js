@@ -14,6 +14,7 @@ let drivers = [
     buyDate: dataValue,
     inspectionTimes: 7,
     line: 3,
+    extra: "这是一段A1的描述信息",
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ let drivers = [
     buyDate: dataValue,
     inspectionTimes: 7,
     line: 7,
+    extra: "这是一段A2的描述信息",
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ let drivers = [
     buyDate: dataValue,
     inspectionTimes: 7,
     line: 5,
+    extra: "这是一段B1的描述信息",
   },
 ];
 let suppliers = new Array(...Array(4)).map((n, id) => new Object({

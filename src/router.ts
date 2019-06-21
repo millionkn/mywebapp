@@ -3,7 +3,7 @@ import Router, { RouteConfig } from 'vue-router'
 import Empty from "@/components/Empty.vue";
 import { KeysType, loadSingle } from './store';
 Vue.use(Router);
-function pack(type: KeysType, table: RouteConfig['component'], form: RouteConfig['component']) {
+function pack(table: RouteConfig['component'], form: RouteConfig['component']) {
   return [
     {
       path: "",
@@ -26,14 +26,14 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/Login",
+      path: "Login",
       component: () => import('@/views/Login.vue'),
       meta: {
         breadcrumbTltle: "登录",
       },
     },
     {
-      path: "/",
+      path: "",
       component: Empty,
       meta: {
         breadcrumbTltle: "管理",
@@ -59,7 +59,7 @@ export default new Router({
           meta: {
             breadcrumbTltle: "供应商",
           },
-          children: pack("suppliers", () => import("@/views/table/Suppliers.vue"), () => import("@/views/form/Supplier.vue"))
+          children: pack(() => import("@/views/table/Suppliers.vue"), () => import("@/views/form/Supplier.vue"))
         },
         {
           path: "Offices",
@@ -67,7 +67,15 @@ export default new Router({
           meta: {
             breadcrumbTltle: "科室",
           },
-          children: pack('offices', () => import('@/views/table/Offices.vue'), () => import('@/views/form/Office.vue'))
+          children: pack(() => import('@/views/table/Offices.vue'), () => import('@/views/form/Office.vue'))
+        },
+        {
+          path: "Drivers",
+          component: Empty,
+          meta: {
+            breadcrumbTltle: "设备",
+          },
+          children: pack(() => import('@/views/table/Drivers.vue'), () => import('@/views/form/Driver.vue')),
         },
       ],
     },
