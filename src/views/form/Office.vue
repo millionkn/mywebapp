@@ -47,7 +47,7 @@ import {
 } from "@/components/mixin";
 export default Vue.extend({
   mixins: [
-    loadingSingleByRouter("offices", "object", "#loading"),
+    loadingSingleByRouter("offices", "object", { target: "#loading" }),
     loadBeforeMounted("#loading", "persons"),
     haveSubmitHandle("offices", "object", "submitHandle")
   ],

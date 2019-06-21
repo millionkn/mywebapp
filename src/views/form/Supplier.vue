@@ -50,7 +50,7 @@ import FormShower from "@/components/FormShower.vue";
 import { haveSubmitHandle, loadingSingleByRouter } from "@/components/mixin";
 export default Vue.extend({
   mixins: [
-    loadingSingleByRouter("suppliers", "object", "#loading"),
+    loadingSingleByRouter("suppliers", "object", { target: "#loading" }),
     haveSubmitHandle("suppliers", "object", "submitHandle")
   ],
   components: {

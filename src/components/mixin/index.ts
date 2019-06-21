@@ -19,23 +19,29 @@ export function loadBeforeMounted(target: string, ...args: KeysType[]): Componen
     },
   }
 }
-export function loadingSingleByRouter(type: KeysType, dataName: string, target?: string): ComponentOptions<Vue> {
+export function loadingSingleByRouter(type: KeysType, dataName: string, opt: { target?: string, default?: object }): ComponentOptions<Vue> {
   return {
     data() {
       return {
-        [dataName]: {}
+        [dataName]: opt.default || {}
       }
     },
     async mounted() {
-      let loading = Loading.service({ target });
-      try {
-        (this as any)[dataName] = await loadSingle(type, Number.parseInt((this as any).$router.currentRoute.params.id))
-      } catch (e) {
-        (this as any)[dataName] = {};
+      let loading;
+      if (opt.target) {
+        loading = Loading.service({ target: opt.target });
       }
+      let data = {};
+      try {
+        data = await loadSingle(type, Number.parseInt((this as any).$router.currentRoute.params.id))
+      } catch (e) {
 
-      loading.close();
-
+      } finally {
+        (this as any)[dataName] = Object.assign(opt.default, data);
+      }
+      if (loading) {
+        loading.close();
+      }
     },
   }
 }
