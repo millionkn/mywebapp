@@ -80,11 +80,12 @@ import TableShower from "@/components/TableShower.vue";
 import {
   Table as ElTable,
   TableColumn as ElTableColumn,
+  MessageBox,
   Loading
 } from "element-ui";
 import * as type from "@/types/index";
 import { loadBeforeMounted } from "@/components/mixin";
-import { checkDrivers } from "@/store";
+import { postData } from "@/store";
 type Info = {
   office?: type.Office;
   driver: type.Driver;
@@ -131,8 +132,23 @@ export default Vue.extend({
     },
     dateOf: (num: number) => moment(num).format("YYYY-M-D"),
     async makesureCheck() {
+      let extra: string;
+      try {
+        extra = ((await MessageBox.prompt("创建日志", "输入日志内容")) as {
+          value: string;
+        }).value;
+      } catch (e) {
+        return;
+      }
       let loading = Loading.service({ target: "#loading" });
-      await checkDrivers(this.selectedRow.map(info => info.driver.id));
+      let date = new Date().valueOf();
+      postData("logs", this.selectedRow.map(info => ({
+        id: -1,
+        date,
+        driverId: info.driver.id,
+        personId: 0,
+        extra
+      })) as type.Log[]);
       loading.close();
     }
   }

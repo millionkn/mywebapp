@@ -129,6 +129,3 @@ export async function deleteData<K extends KeysType>(type: K, arr: typeof outerD
 export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
     await store.dispatch('postData', { type, arr })
 }
-export async function checkDrivers(driverIdArray: number[]) {
-    await new Promise((res) => setTimeout(res, 3000))
-}
