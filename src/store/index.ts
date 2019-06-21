@@ -2,6 +2,7 @@ import Vuex, { Store } from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
 import * as type from '@/types/index';
+import { MessageBox } from 'element-ui';
 Vue.use(Vuex);
 type Unset = never[]
 const unset = [] as Unset;
@@ -18,11 +19,11 @@ export type KeysType = keyof OuterData;
 
 let store = new Vuex.Store({
     state: {
-        user: <type.User | null>null,
+        user: <type.Person | null>null,
         data: outerData
     },
     mutations: {
-        setUser(state, user: type.User | null) {
+        setUser(state, user: type.Person | null) {
             state.user = user;
         },
         setData<K extends KeysType>(state: { data: typeof outerData }, { type, array }: {
@@ -114,18 +115,31 @@ let store = new Vuex.Store({
     }
 });
 export default store;
+async function showMessageOnError<T>(promise: Promise<T>) {
+    try {
+        return await promise;
+    } catch (e) {
+        let text = "操作失败";
+        try {
+            text = e.response.data.message;
+        } catch (e) { }
+        await MessageBox.alert(text, "错误");
+        throw e;
+    }
+
+}
 export async function loadSingle<K extends KeysType>(type: K, id: number): Promise<typeof outerData[K]> {
     return await store.dispatch('loadSingle', { type, id })
 }
 export async function putData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await store.dispatch('putData', { type, arr })
+    await showMessageOnError(store.dispatch('putData', { type, arr }))
 }
 export async function loadData(types: KeysType[]) {
-    await store.dispatch('loadData', { types })
+    await showMessageOnError(store.dispatch('loadData', { types }))
 }
 export async function deleteData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await store.dispatch('deleteData', { type, arr })
+    await showMessageOnError(store.dispatch('deleteData', { type, arr }))
 }
 export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await store.dispatch('postData', { type, arr })
+    await showMessageOnError(store.dispatch('postData', { type, arr }))
 }

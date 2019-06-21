@@ -1,66 +1,57 @@
 <template>
-  <contioner>
-    <div class="am-panel am-panel-default">
-      <header class="am-panel-hd">
-        <h3 class="am-panel-title">登录</h3>
-      </header>
-      <my-form :items="items" @submit="login" ref="loading" id="test">
-        <div class="save-me">
-          <div class="am-checkbox">
-            <label>
-              <input type="checkbox" v-model="savePassword">记住密码
-            </label>
-          </div>
-          <button class="am-btn am-btn-secondary" type="submit">登录</button>
+  <form-shower>
+    <template #head>
+      <span>登录</span>
+    </template>
+    <template #default>
+      <form @submit.prevent="submitHandle" id="loading">
+        <div class="am-input-group am-input-group-secondary">
+          <span class="am-input-group-label">
+            <i class="am-icon-fw am-icon-user"></i>
+          </span>
+          <input type="text" v-model="object.username" class="am-form-field">
         </div>
-      </my-form>
-    </div>
-  </contioner>
+        <br>
+        <div class="am-input-group am-input-group-secondary">
+          <span class="am-input-group-label">
+            <i class="am-icon-fw am-icon-lock"></i>
+          </span>
+          <input type="password" v-model="object.password" class="am-form-field">
+        </div>
+        <br>
+        <button class="am-btn am-btn-secondary" type="submit">提交</button>
+      </form>
+    </template>
+  </form-shower>
 </template>
-<style lang="less" scoped>
-.save-me {
-  margin-top: 1em;
-  display: flex;
-  justify-content: flex-end;
-}
-</style>
 <script lang="ts">
 import Vue from "vue";
-import { Loading } from "element-ui";
-import { Item } from "@/components/Form.vue";
-
+import FormShower from "@/components/FormShower.vue";
+import { Loading, MessageBox } from "element-ui";
+import axios from "axios";
+import * as type from "@/types";
 export default Vue.extend({
   components: {
-    contioner: () => import("@/components/Contioner.vue"),
-    myForm: () => import("@/components/Form.vue"),
+    FormShower
   },
   data() {
-    return {
-      savePassword: <true | false>false,
-      items: <Item[]>[
-        {
-          icon: "am-icon-user",
-          type: "text",
-          label: "用户名",
-          name: "username"
-        },
-        {
-          icon: "am-icon-lock",
-          type: "password",
-          label: "密码",
-          name: "password"
-        }
-      ]
-    };
+    return { object: {} };
   },
   methods: {
-    async login(formData: any) {
-      let loading = Loading.service({
-        target: <HTMLElement>(<Vue>this.$refs["loading"]).$el
-      });
-      await this.$store.dispatch("login", formData);
-      this.$router.back();
-      loading.close();
+    async submitHandle() {
+      let loading = Loading.service({ target: "#loading" });
+      try {
+        await this.$store.dispatch("login", this.object);
+        loading.close();
+        this.$router.back();
+      } catch (e) {
+        loading.close();
+        let text = "登录失败";
+        try {
+          text = e.response.data.message;
+        } catch (e) {}
+        await MessageBox.alert(text, "错误");
+      }
     }
   }
 });

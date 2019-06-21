@@ -1,7 +1,3 @@
-export type User = {
-  username: string,
-  password: string,
-}
 export type Supplier = Record<
   "name" | "businessLicense" | "medicalDeviceBusinessLicense",
   string

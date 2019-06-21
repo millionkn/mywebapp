@@ -13,18 +13,31 @@ module.exports = {
         before(app, server) {
             app.use(bodyParser.urlencoded({ extended: false }));
             app.use(bodyParser.json());
+            app.use(require('express-session')({
+                secret: "gflkdglkjeoi",
+                saveUninitialized: false,
+            }))
+            let testData = require('./testData/jsonServer.js');
+            let password = {};
+            testData.persons.forEach(p => password[p.username] = '123456');
             app.post('/login', (req, res) => {
-                if (req.body.username === 'admin' && req.body.password === '12345678') {
-                    res.send({
-                        name: "测试用户",
-                        role: "测试者",
-                    })
+                let person = testData.persons.find(p => p.username === req.body.username);
+                if (person && req.body.password === password[person.username]) {
+                    if (testData.roles[person.roleId]) {
+                        res.send(person);
+                        req.session.person = person;
+                    } else {
+                        res.status(401).send({ message: "用户未审核" });
+                    }
                 } else {
-                    res.sendStatus(403)
+                    res.status(403).send({ message: "用户名或密码错误" });
                 }
             });
-            app.post('/loginOut', (req, res) => { res.send(undefined) });
-            app.use('/restAPI', require('json-server').router(require('./testData/jsonServer.js')));
+            app.post('/loginOut', (req, res) => {
+                req.session.destroy();
+                res.send(undefined);
+            });
+            app.use('/restAPI', require('json-server').router(testData));
         }
     }
 }

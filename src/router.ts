@@ -26,7 +26,7 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "Login",
+      path: "/Login",
       component: () => import('@/views/Login.vue'),
       meta: {
         breadcrumbTltle: "登录",
