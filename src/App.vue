@@ -5,9 +5,9 @@
       <logo/>
       <user/>
     </div>
-    <div class="body am-scrollable-horizontal">
+    <div class="body">
       <my-nav class="aside am-hide-sm-only" :items="navs"></my-nav>
-      <div class="body am-scrollable-vertical">
+      <div class="body">
         <ol class="am-breadcrumb am-hide-sm-only">
           <li v-for="(title,index) in breadcrumbTltles" :key="index">
             <a
@@ -18,7 +18,9 @@
             >{{title}}</a>
           </li>
         </ol>
-        <router-view class="view"/>
+        <div class="contioner am-scrollable-vertical am-scrollable-horizontal">
+          <router-view/>
+        </div>
       </div>
     </div>
   </div>
@@ -61,14 +63,12 @@
         background-color: #ebebeb;
         margin: 0;
       }
-      > .view {
+      > .contioner {
         padding: 6px;
         @media @small-only {
           padding: 0;
         }
-        display: flex;
-        height: 100%;
-        flex-direction: column;
+        flex-grow: 1;
       }
     }
   }
