@@ -40,10 +40,11 @@
           </template>
         </el-table-column>
         <el-table-column label="设备信息">
-          <template #default>
-            <span :class="'text-button'">
-              <a href="#">详情</a>
-            </span>
+          <template #default="scope">
+            <button
+              class="am-btn am-btn-primary am-round"
+              @click="$router.push(`Drivers/${scope.row.driver.id}`)"
+            >详情</button>
           </template>
         </el-table-column>
         <el-table-column label="检修记录">
