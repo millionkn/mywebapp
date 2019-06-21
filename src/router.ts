@@ -77,6 +77,13 @@ export default new Router({
           },
           children: pack(() => import('@/views/table/Drivers.vue'), () => import('@/views/form/Driver.vue')),
         },
+        {
+          path: "Logs",
+          component: () => import('@/views/table/Logs.vue'),
+          meta: {
+            breadcrumbTltle: "日志",
+          },
+        },
       ],
     },
   ]

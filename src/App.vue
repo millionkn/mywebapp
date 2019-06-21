@@ -97,7 +97,8 @@ export default Vue.extend({
         new Item("供应商管理", "/Suppliers"),
         new Item("科室管理", "/Offices"),
         new Divider(),
-        new Item("设备管理", "/Drivers")
+        new Item("设备管理", "/Drivers"),
+        new Item("检修日志", "/Logs")
       ]
     };
   },
