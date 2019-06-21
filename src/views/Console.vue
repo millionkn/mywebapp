@@ -15,6 +15,15 @@
       </div>
     </template>
     <template #default>
+      <el-dialog :visible.sync="timeLineShowing" :before-close="()=>timeLineShowing=false">
+        <timeline>
+          <timeline-item
+            v-for="item in timeLine"
+            :key="item.id"
+            :timestamp="item.date"
+          >{{item.extra}}</timeline-item>
+        </timeline>
+      </el-dialog>
       <el-table
         :data="tableData.filter(info=>info.driver.name.includes(driverName))"
         @selection-change="arr=>selectedRow=arr"
@@ -39,19 +48,17 @@
             >{{scope.row.driver.inspectionTimes-daysAfterLastCheck(scope.row)}}</span>
           </template>
         </el-table-column>
+        <el-table-column label="检修记录">
+          <template #default="scope">
+            <button class="am-btn am-btn-primary am-round" @click="showTimeLine(scope.row)">检修记录</button>
+          </template>
+        </el-table-column>
         <el-table-column label="设备信息">
           <template #default="scope">
             <button
               class="am-btn am-btn-primary am-round"
               @click="$router.push(`Drivers/${scope.row.driver.id}`)"
             >详情</button>
-          </template>
-        </el-table-column>
-        <el-table-column label="检修记录">
-          <template #default>
-            <span :class="'text-button'">
-              <a href="#">检修记录</a>
-            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -81,6 +88,9 @@ import {
   Table as ElTable,
   TableColumn as ElTableColumn,
   MessageBox,
+  Dialog as ElDialog,
+  Timeline,
+  TimelineItem,
   Loading
 } from "element-ui";
 import * as type from "@/types/index";
@@ -96,7 +106,10 @@ export default Vue.extend({
   components: {
     ElTable,
     ElTableColumn,
-    TableShower
+    TableShower,
+    ElDialog,
+    Timeline,
+    TimelineItem
   },
   computed: {
     tableData(): Info[] {
@@ -116,7 +129,13 @@ export default Vue.extend({
     return {
       office: undefined as string | undefined,
       driverName: "" as string,
-      selectedRow: [] as Info[]
+      selectedRow: [] as Info[],
+      timeLineShowing: false as boolean,
+      timeLine: [] as ({
+        id: number;
+        date: string;
+        extra: string;
+      }[])
     };
   },
   methods: {
@@ -150,6 +169,22 @@ export default Vue.extend({
         extra
       })) as type.Log[]);
       loading.close();
+    },
+    showTimeLine(row: Info) {
+      this.timeLineShowing = true;
+      this.timeLine = (this.$store.getters.logs as type.Log[])
+        .filter(log => log.driverId === row.driver.id)
+        .sort((a, b) => b.date - a.date)
+        .map(log =>
+          Object.assign({}, log, {
+            date: moment(log.date).format("YYYY-MM-DD")
+          })
+        );
+      this.timeLine.push({
+        id: NaN,
+        date: moment(row.driver.buyDate).format("YYYY-MM-DD"),
+        extra: row.driver.extra
+      });
     }
   }
 });
