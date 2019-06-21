@@ -72,12 +72,6 @@
 .normal {
   color: #409eff;
 }
-.text-button {
-  color: #67c23a;
-}
-#full {
-  align-items: stretch;
-}
 </style>
 
 <script lang="ts">
