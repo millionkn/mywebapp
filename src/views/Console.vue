@@ -162,7 +162,6 @@ export default Vue.extend({
       let loading = Loading.service({ target: "#loading" });
       let date = new Date().valueOf();
       postData("logs", this.selectedRow.map(info => ({
-        id: -1,
         date,
         driverId: info.driver.id,
         personId: 0,
