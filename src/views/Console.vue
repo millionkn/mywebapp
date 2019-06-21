@@ -95,7 +95,7 @@ import {
 } from "element-ui";
 import * as type from "@/types/index";
 import { loadBeforeMounted } from "@/components/mixin";
-import { postData } from "@/store";
+import { postData, loadData } from "@/store";
 type Info = {
   office?: type.Office;
   driver: type.Driver;
@@ -161,13 +161,13 @@ export default Vue.extend({
       }
       let loading = Loading.service({ target: "#loading" });
       let date = new Date().valueOf();
-      postData("logs", this.selectedRow.map(info => ({
-        id: -1,
+      await postData("logs", this.selectedRow.map(info => ({
         date,
         driverId: info.driver.id,
         personId: 0,
         extra
       })) as type.Log[]);
+      await loadData(["logs"]);
       loading.close();
     },
     showTimeLine(row: Info) {
