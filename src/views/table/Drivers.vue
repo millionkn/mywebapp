@@ -30,7 +30,7 @@
             <div class="am-panel am-panel-secondary">
               <div class="am-panel-hd">{{scope.row.name}}</div>
               <div class="am-panel-bd">
-                <template v-if="scope.row.extar">{{scope.row.extra}}</template>
+                <template v-if="scope.row.extra">{{scope.row.extra}}</template>
                 <template v-else>
                   <span style="color:#DDDDDD">没有说明</span>
                 </template>
