@@ -20,11 +20,7 @@
         @selection-change="arr=>selectedRow=arr"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column
-          label="科室"
-          :filters="$store.getters.offices.map(office => new Object({ value: office.id, text: office.name }))"
-          :filter-method="(value, row) => row.office.id === value"
-        >
+        <el-table-column label="科室">
           <template #default="scope">{{(scope.row.office||{name:"未指定"}).name}}</template>
         </el-table-column>
         <el-table-column label="仪器名称">

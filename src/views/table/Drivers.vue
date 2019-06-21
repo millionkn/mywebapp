@@ -39,11 +39,7 @@
           </template>
         </el-table-column>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column
-          label="科室"
-          :filters="$store.getters.offices.map(office => ({ value: office.id, text: office.name }))"
-          :filter-method="(value, row) => row.officeId === value"
-        >
+        <el-table-column label="科室">
           <template
             #default="scope"
           >{{($store.getters.offices.find(office=>office.id===scope.row.officeId)||{name:"未指定"}).name}}</template>
