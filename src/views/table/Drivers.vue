@@ -62,20 +62,6 @@
     </template>
   </table-shower>
 </template>
-<style lang="less" scoped>
-.danger {
-  color: #f56c6c;
-}
-.normal {
-  color: #409eff;
-}
-.text-button {
-  color: #67c23a;
-}
-#full {
-  align-items: stretch;
-}
-</style>
 
 <script lang="ts">
 import Vue from "vue";
