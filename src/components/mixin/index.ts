@@ -37,7 +37,7 @@ export function loadingSingleByRouter(type: KeysType, dataName: string, opt: { t
       } catch (e) {
 
       } finally {
-        (this as any)[dataName] = Object.assign(opt.default, data);
+        (this as any)[dataName] = Object.assign(opt.default || {}, data);
       }
       if (loading) {
         loading.close();
