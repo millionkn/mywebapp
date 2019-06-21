@@ -78,11 +78,13 @@ export default Vue.extend({
   computed: {
     tableData(): any {
       let logs = this.$store.getters.logs as types.Log[];
-      return logs.filter(log =>
-        (
-          this.findObjectById("drivers", log.driverId) || { name: "" }
-        ).name.includes(this.driverName)
-      );
+      return logs
+        .filter(log =>
+          (
+            this.findObjectById("drivers", log.driverId) || { name: "" }
+          ).name.includes(this.driverName)
+        )
+        .sort((a, b) => b.date - a.date);
     }
   },
   methods: {
