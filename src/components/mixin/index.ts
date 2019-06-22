@@ -56,7 +56,6 @@ export function haveSubmitHandle(type: KeysType, dataName: string, handleName: s
         } else {
           await putData(type, [object]);
         }
-        await loadData([type]);
         loading.close();
         this.$router.back();
       }
@@ -72,7 +71,6 @@ export function haveDeleteHandle<T extends KeysType>(type: T, handleName: string
         });
         let array = (this as any)[targetArrayName]
         await deleteData(type, array);
-        await loadData([type]);
         array.splice(0, array.length);
         loading.close();
       }

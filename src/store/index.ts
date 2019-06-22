@@ -132,14 +132,17 @@ export async function loadSingle<K extends KeysType>(type: K, id: number): Promi
     return await store.dispatch('loadSingle', { type, id })
 }
 export async function putData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('putData', { type, arr }))
+    await showMessageOnError(store.dispatch('putData', { type, arr }));
+    await loadData([type]);
 }
 export async function loadData(types: KeysType[]) {
     await showMessageOnError(store.dispatch('loadData', { types }))
 }
 export async function deleteData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('deleteData', { type, arr }))
+    await showMessageOnError(store.dispatch('deleteData', { type, arr }));
+    await loadData([type]);
 }
 export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('postData', { type, arr }))
+    await showMessageOnError(store.dispatch('postData', { type, arr }));
+    await loadData([type]);
 }

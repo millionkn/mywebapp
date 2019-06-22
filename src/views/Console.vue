@@ -161,7 +161,6 @@ export default Vue.extend({
         personId: 0,
         extra
       })) as type.Log[]);
-      await loadData(["logs"]);
       loading.close();
     },
     showTimeLine(row: Info) {

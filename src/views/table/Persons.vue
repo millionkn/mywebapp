@@ -67,7 +67,6 @@ export default Vue.extend({
     async submitChange() {
       let loading = Loading.service({ target: "#loading" });
       await putData("persons", new Array(...this.changed));
-      await loadData(["persons"]);
       this.changed = new Set() as Set<Person>;
       loading.close();
     }
