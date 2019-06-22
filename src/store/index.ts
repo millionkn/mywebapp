@@ -115,34 +115,21 @@ let store = new Vuex.Store({
     }
 });
 export default store;
-async function showMessageOnError<T>(promise: Promise<T>) {
-    try {
-        return await promise;
-    } catch (e) {
-        let text = "操作失败";
-        try {
-            text = e.response.data.message;
-        } catch (e) { }
-        await MessageBox.alert(text, "错误");
-        throw e;
-    }
-
-}
 export async function loadSingle<K extends KeysType>(type: K, id: number): Promise<typeof outerData[K]> {
     return await store.dispatch('loadSingle', { type, id })
 }
 export async function putData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('putData', { type, arr }));
+    await store.dispatch('putData', { type, arr });
     await loadData([type]);
 }
 export async function loadData(types: KeysType[]) {
-    await showMessageOnError(store.dispatch('loadData', { types }))
+    await store.dispatch('loadData', { types })
 }
 export async function deleteData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('deleteData', { type, arr }));
+    await store.dispatch('deleteData', { type, arr });
     await loadData([type]);
 }
 export async function postData<K extends KeysType>(type: K, arr: typeof outerData[K]): Promise<void> {
-    await showMessageOnError(store.dispatch('postData', { type, arr }));
+    await store.dispatch('postData', { type, arr });
     await loadData([type]);
 }

@@ -1,4 +1,4 @@
-import { Loading } from 'element-ui';
+import { Loading, MessageBox } from 'element-ui';
 import {
   KeysType,
   loadData,
@@ -51,13 +51,18 @@ export function haveSubmitHandle(type: KeysType, dataName: string, handleName: s
       async [handleName]() {
         let loading = Loading.service({ target: this.$el as HTMLElement });
         let object = (this as any)[dataName]
-        if (object.id === undefined) {
-          await postData(type, [object]);
-        } else {
-          await putData(type, [object]);
+        try {
+          if (object.id === undefined) {
+            await postData(type, [object]);
+          } else {
+            await putData(type, [object]);
+          }
+          loading.close();
+          this.$router.back();
+        } catch (e) {
+          loading.close();
+          await MessageBox.alert(e.response.data.message || '提交失败');
         }
-        loading.close();
-        this.$router.back();
       }
     }
   }
@@ -66,13 +71,16 @@ export function haveDeleteHandle<T extends KeysType>(type: T, handleName: string
   return {
     methods: {
       async [handleName]() {
-        let loading = Loading.service({
-          target: targetElement
-        });
-        let array = (this as any)[targetArrayName]
-        await deleteData(type, array);
-        array.splice(0, array.length);
-        loading.close();
+        let loading = Loading.service({ target: targetElement });
+        let array = (this as any)[targetArrayName];
+        try {
+          await deleteData(type, array);
+          array.splice(0, array.length);
+          loading.close();
+        } catch (e) {
+          loading.close();
+          await MessageBox.alert(e.response.data.message || '删除失败');
+        }
       }
     }
   }
